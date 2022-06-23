@@ -1,0 +1,35 @@
+# Parameters for User Interface
+ui_params:
+  input_file_name: 'file_name_here' # Input file name
+  numberOfChromosomes: 50 # Total number of schedules in population used to find best schedule. Note that higher number increases run time.
+
+# Parameters related to scoring of schedules
+# All ending _factor are scoring weights for specific components, set by tuning the algorithm
+# All end _check are Booleans used to turn speciality-specific goals on and off
+schedule_params:
+  within_capacity_scoring_factor: 100 # Weighting for whether a ward is within capacity
+  double_booked_scoring_factor: 50 # Weighting for whether a ward is double booked
+  correct_num_wards_scoring_factor: 10 # Weighting for whether student has correct number of wards assigned
+  uniq_departments_scoring_factor: 500 # Weighting for unique number of departments
+  uniq_wards_scoring_factor: 100 # Weighting for unique number of wards
+  all_placements_assigned_scoring_factor: 5 # Weighting for all placements being assigned N.B. This may seem low, but any schedule where all are not assigned is non-viable
+  capacity_utilisation_scoring_factor: 2000 # Weighting for % of placement capacity utilised
+  medical_placement_check: False # Boolean to turn Medical speciality goal on/off
+  medical_placement_scoring_factor: 2 # Weight for a 'Medical' placement being included
+  surgical_placement_check: False # Boolean to turn Surgical speciality goal on/off
+  surgical_placement_scoring_factor: 2 # Weight for a 'Surgical' placement being included
+  community_placement_check: False # Boolean to turn Community speciality goal on/off
+  community_placement_scoring_factor: 2 # Weight for a 'Community' placement being included
+  critical_care_placement_check: False # Boolean to turn Critical Care speciality goal on/off
+  critical_care_placement_scoring_factor: 2 # Weight for a 'Critical Care' placement being included
+
+# Parameters relating to genetic algorithm
+genetic_algorithm_params:
+  mutationProbability: 0.1 # Probability of a mutation occuring
+  recombinationProbability: 0.2 # Probability of recombintiation occurring
+  num_mutations: 1 # Number of mutations applied to a schedule
+  recomb_points: 5 # Nunber of points that schedules will be split along in recombination
+  max_no_change_iterations: 10 # Threshold for early stopping if no change in fitness
+  fitness_threshold: 0.99 # Minimum acceptable fitness
+  changed_protected_proportion: 0.05 # Proporition of schedules which are not to be replaced by mutations/recombination/new schedules
+  new_schedule_prop: 0.1 # Proportion of overall population to be replaced by entirely new schedules at each round

@@ -1,0 +1,69 @@
+{
+    "student_data_fields": {
+        "university": [
+            "University1",
+            "University2"
+        ],
+        "qualification": [
+            "Qualification1",
+            "Qualification2"
+        ],
+        "course_start": [
+            "CourseStartDate1",
+            "CourseStartDate2"
+        ],
+        "year": [
+            "YearA",
+            "YearB"
+        ],
+        "allowable_covid_status": [
+            "CovidStatus1",
+            "CovidStatus2"
+        ]
+    },
+    "ward_data_fields": {
+        "ward_speciality": [
+            "Speciality1",
+            "Speciality2",
+            "Speciality3"
+        ],
+        "covid_status": [
+            "CovidStatus1",
+            "CovidStatus2"
+        ],
+        "education_audit_exp": [
+            "2121-03-01",
+            "2121-12-01"
+        ]
+    },
+    "placement_data_fields": {
+        "university": [
+            "University1",
+            "University2"
+        ],
+        "qualification": [
+            "Qualification1",
+            "Qualification2"
+        ],
+        "course_start": [
+            "CourseStartDate1",
+            "CourseStartDate2"
+        ],
+        "placement_name": [
+            "Placement1",
+            "Placement2",
+            "Placement3",
+            "Placement4"
+        ],
+        "placement_start_date": [
+            "2121-05-01",
+            "2121-06-07",
+            "2121-07-14",
+            "2121-08-21",
+            "2121-09-28",
+            "2121-10-03",
+            "2121-11-10",
+            "2121-12-17"
+        ]
+    }
+}

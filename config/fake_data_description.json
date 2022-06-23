@@ -1,0 +1,29 @@
+{
+    "student_data_fields": [
+        "student_id",
+        "university",
+        "qualification",
+        "course_start",
+        "year",
+        "prev_placements",
+        "allowable_covid_status"
+    ],
+    "ward_data_fields": [
+        "ward_name",
+        "ward_speciality",
+        "education_audit_exp",
+        "covid_status",
+        "capacity_num",
+        "p1_cap",
+        "p2_cap",
+        "p3_cap"
+    ],
+    "placement_data_fields": [
+        "university",
+        "qualification",
+        "course_start",
+        "placement_name",
+        "placement_start_date",
+        "placement_len_weeks"
+    ]
+}

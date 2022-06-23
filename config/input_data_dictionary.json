@@ -1,0 +1,171 @@
+{"placements" : {
+    "fields": [
+        {
+            "student_cohort": [
+                {
+                    "name": "student_cohort",
+                    "description": "Cohort of the student, containing university, qualification and year of admission, in the format [University Name]_[Qualification] [MonthYear of Admission]",
+                    "type": "string",
+                    "Example": "UniversityA_BSc Jan99"
+                }
+            ],
+            "placement_name": [
+                {
+                    "name": "placement_name",
+                    "description": "Name of the placement, usually referring to the year and number of the placement",
+                    "type": "string",
+                    "Example": "P1, E1"
+                }
+            ],
+            "placement_start_date": [
+                {
+                    "name": "placement_start_date",
+                    "description": "Date on which the placement should start",
+                    "type": "datetime",
+                    "Example": "01/01/1990"
+                }
+            ],
+            "placement_len_weeks": [
+                {
+                    "name": "placement_len_weeks",
+                    "description": "Length of the placement in weeks",
+                    "type": "int64",
+                    "Example": "6"
+                }
+            ]
+        }
+    ]
+},
+"students": {
+    "fields": [
+        {
+            "student_id": [
+                {
+                    "name": "student_id",
+                    "description": "Unique identifier for the student",
+                    "type": "string",
+                    "Example": "Student123"
+                }
+            ],
+            "student_cohort": [
+                {
+                    "name": "student_cohort",
+                    "description": "Cohort of the student, containing university, qualification and year of admission, in the format [University Name]_[Qualification] [MonthYear of Admission]",
+                    "type": "string",
+                    "Example": "UniversityA_BSc Jan99"
+                }
+            ],
+            "university": [
+                {
+                    "name": "university",
+                    "description": "University of study",
+                    "type": "string",
+                    "Example": "UniversityA"
+                }
+            ],
+            "qualification": [
+                {
+                    "name": "qualification",
+                    "description": "Qualification the student is studying for",
+                    "type": "string",
+                    "Example": "BSc"
+                }
+            ],
+            "year": [
+                {
+                    "name": "year",
+                    "description": "Year of study",
+                    "type": "int64",
+                    "Example": "1"
+                }
+            ],
+            "prev_placements": [
+                {
+                    "name": "prev_placements",
+                    "description": "A list of previous wards that the student has been on placement at, in the format ['wardname1','wardname2','wardname3']",
+                    "type": "list",
+                    "Example": "['ward1','ward2','ward3']"
+                }
+            ],
+            "allowable_covid_status": [
+                {
+                    "name": "allowable_covid_status",
+                    "description": "The level of covid risk that the student can tolerate",
+                    "type": "string",
+                    "Example": "Low/Medium"
+                }
+            ]
+        }
+    ]
+},
+"wards":{
+    "fields": [
+        {
+            "ward_name": [
+                {
+                    "name": "ward_name",
+                    "description": "Name of the ward",
+                    "type": "string",
+                    "Example": "Ward1"
+                }
+            ],
+            "ward_speciality": [
+                {
+                    "name": "ward_speciality",
+                    "description": "The specialisation of the ward",
+                    "type": "string",
+                    "Example": "Accident and Emergency"
+                }
+            ],
+            "education_audit_exp": [
+                {
+                    "name": "education_audit_exp",
+                    "description": "Expiry date of the Education Audit",
+                    "type": "datetime",
+                    "Example": "01/01/1990"
+                }
+            ],
+            "covid_status": [
+                {
+                    "name": "covid_status",
+                    "description": "Level of covid risk that the ward holds",
+                    "type": "string",
+                    "Example": "Medium/High"
+                }
+            ],
+            "capacity_num": [
+                {
+                    "name": "capacity_num",
+                    "description": "Overall capacity of the ward",
+                    "type": "int64",
+                    "Example": "4"
+                }
+            ],
+            "p1_cap": [
+                {
+                    "name": "p1_cap",
+                    "description": "The number of year 1 (or part 1) students that the ward can accommodate",
+                    "type": "int64",
+                    "Example": "2"
+                }
+            ],
+            "p2_cap": [
+                {
+                    "name": "p2_cap",
+                    "description": "The number of year 2 (or part 2) students that the ward can accommodate",
+                    "type": "int64",
+                    "Example": "2"
+                }
+            ],
+            "p3_cap": [
+                {
+                    "name": "p3_cap",
+                    "description": "The number of year 3 (or part 3) students that the ward can accommodate",
+                    "type": "int64",
+                    "Example": "2"
+                }
+            ]
+        }
+    ]
+}
+}
