@@ -117,7 +117,7 @@ Additional example data can be viewed by generating the fake data as above.
 
 Your input data file will need to be stored in `data/` and its name added to `config/params.yml` in the `input_file_name` variable within `ui_params`.
 
-If further support is needed, please get in touch with us for support: ai-skunkworks@nhsx.nhs.uk
+If further support is needed, please get in touch with us for support: england.aiskunkworks@nhs.net
 
 
 ## NHS AI Lab Skunkworks
@@ -125,7 +125,7 @@ The project is carried out by the NHS AI Lab Skunkworks, which exists within the
 
 Find out more about the [NHS AI Lab Skunkworks](https://www.nhsx.nhs.uk/ai-lab/ai-lab-programmes/skunkworks/).
 Join our [Virtual Hub](https://future.nhs.uk/connect.ti/system/text/register) to hear more about future problem-sourcing event opportunities.
-Get in touch with the Skunkworks team at [aiskunkworks@nhsx.nhs.uk](aiskunkworks@nhsx.nhs.uk).
+Get in touch with the Skunkworks team at [england.aiskunkworks@nhs.net](england.aiskunkworks@nhs.net).
 
 ## Acknowledgements
 This tool is developed, in part, based on [GASchedule.py](https://github.com/mcychan/GASchedule.py) which was used as a starting point for this project
