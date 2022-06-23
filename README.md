@@ -9,7 +9,7 @@ This project is an example of the AI Skunkworks team offering capability resourc
 ## Background
 Placement capacity is a major constraint in building out a hospital's workforce pipeline. The [Royal College of Nursing says](https://www.ed.ac.uk/files/imports/fileManager/RCNHelpingStudentsgettheBestfromtheirPracticePlacements.pdf) that "Learning in the contextual setting of clinical practice enables you to confront many of the challenges and issues related to caring. Practice is where lifelong learning is promoted and enhanced." and gives some benefits of undertaking placements as "continue to develop your competence in both interpersonal and practical skills" and "work within a wide range of rapidly changing health and social services that recognise the continuing nature of care" to give just two examples.
 
-Placement teams in each Trust/organisation create individualised schedules for every learner that enters the Trust on placement. For larger Trusts, this means creating 100s of schedules that meet the regulatory standards, curriculum requirements and placement capacity.
+Placement teams in each Trust/organisation create individualised schedules for every learner that enters the Trust on placement. For larger Trusts, this means creating hundreds of schedules that meet the regulatory standards, curriculum requirements and placement capacity.
 Typically, Trusts creates their schedules manually in spreadsheets. This is problematic for several reasons:
 - Non-standardised spreadsheets preclude efficient use of system-wide placement capacity
 
