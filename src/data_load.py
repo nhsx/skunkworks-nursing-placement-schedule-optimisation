@@ -11,7 +11,7 @@ class DataLoader:
         """
         Function to load data from files and do basic preprocessing and prep
 
-        :param filename: name of the .XLSX file in the data folder for input data to be read from
+        :param filename: name of the .xlsx file in the data folder for input data to be read from
         :returns: nothing returned by function, various class objects created
         """
 
