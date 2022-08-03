@@ -9,7 +9,10 @@ import time
 class DataLoader:
     def readData(self, filename):
         """
-        Load data from files and do basic preprocessing and prep
+        Function to load data from files and do basic preprocessing and prep
+
+        :param filename: name of the .XLSX file in the data folder for input data to be read from
+        :returns: nothing returned by function, various class objects created
         """
 
         # Load relevant files
@@ -130,7 +133,10 @@ class DataLoader:
 
     def preprocData(self, num_weeks):
         """
-        Convert dataframes into lists of Class objects for Genetic Algorithm
+        Function to convert dataframes into lists of Class objects for Genetic Algorithm
+
+        :param num_weeks: the number of weeks covered by the schedule
+        :returns: slots, wards and placements class objects
         """
 
         num_slots = list(range(1, num_weeks + 1))
@@ -187,6 +193,11 @@ class DataLoader:
 
 
 def input_quality_checks(self):
+    """
+    Function to conduct basic checks that data is in required format
+
+    :raises TypeError: raises exception if data is not in correct format
+    """
     try:
         self.students["prev_placements"] = self.students["prev_placements"].astype(list)
     except:
