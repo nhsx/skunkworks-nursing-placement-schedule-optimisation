@@ -75,7 +75,7 @@ class GeneticAlgorithm:
 
     def seed_schedules(self):
         """
-        Initiase the first generation of schedules
+        Function to initiase the first generation of schedules
         """
         for i in range(0, self.number_of_schedules):
             schedule_obj = Schedule(
@@ -93,7 +93,7 @@ class GeneticAlgorithm:
 
     def viable_schedule_check(self) -> Tuple[bool, object, list]:
         """
-        Check whether a viable schedule exists with the prequisite level of fitness
+        Function to check whether a viable schedule exists with the prequisite level of fitness
 
         :returns: bool to determine whether evaluation should continue, a schedule and a list of schedule fitnesses
         """
@@ -116,7 +116,7 @@ class GeneticAlgorithm:
 
     def status_update(self):
         """
-        Output status update to demonstrate progress in evolving schedules
+        Function to output status update to demonstrate progress in evolving schedules
 
         :returns: current count of iterations
         """
@@ -133,7 +133,7 @@ class GeneticAlgorithm:
 
     def no_change_check(self) -> Tuple[bool, object]:
         """
-        Check whether there is a new fittest schedule after another round of evolution
+        Function to check whether there is a new fittest schedule after another round of evolution
 
         :retrns: bool to determine whether evaluation should continue and a schedule
         """
@@ -160,7 +160,7 @@ class GeneticAlgorithm:
 
     def evaluate(self) -> Tuple[bool, object, float, int, list]:
         """
-        Evaluate the fitness of the existing cohort of schedules
+        Function to evaluate the fitness of the existing cohort of schedules
 
         :returns: bool to determine if evaluation should continue and then details on current best schedule
         """
@@ -180,7 +180,7 @@ class GeneticAlgorithm:
 
     def execute_mutation(self):
         """
-        Randomly determines which schedules should be mutated
+        Function to randomly determine which schedules should be mutated
 
         :returns: no explicity return but populates new_schedules class object
         """
@@ -201,9 +201,8 @@ class GeneticAlgorithm:
 
     def select_parents(self):
         """
-        Using a roulette wheel approach (i.e. probability of selection is
-        proportional to fitness of schedule), parents for recombination
-        are selected
+        Function to use a roulette wheel approach (i.e. probability of selection is
+        proportional to fitness of schedule) to select parents for recombination
 
         :returns: a list of schedules to be used as parents for recombination
         """
@@ -232,8 +231,7 @@ class GeneticAlgorithm:
 
     def generate_offspring(self, selected_parents):
         """
-        Using a selected set of parents, produce offspring through
-        recombination
+        Function to produce offspring through recombination using a selected set of parents
 
         :param selected_parents: a list of schedules to be used as parents for recombination
         :returns: no explicit return but population new_schedules class object with recombined schedules
@@ -257,7 +255,7 @@ class GeneticAlgorithm:
 
     def culling(self, num_new_schedules):
         """
-        To prevent population stagnating, introduce proportion of newly generated schedules each round
+        Function to prevent population stagnating, introduce proportion of newly generated schedules each round
 
         :param num_new_schedules: the number of new schedules to be generated/to be replaced in existing population
         :returns: no explicit return but population new_schedules class object with newly generated schedules
@@ -278,7 +276,7 @@ class GeneticAlgorithm:
 
     def update_population(self):
         """
-        Using mutated schedules and offspring, replace the least fit schedules
+        Function to using mutated schedules and offspring, replace the least fit schedules
 
         :returns: no explicity return but replaces lowest scoring schedules in schedules class object with newly generated ones
         """
@@ -295,7 +293,7 @@ class GeneticAlgorithm:
 
     def evolve(self):
         """
-        Execute the genetic algorithm until convergence or no change found
+        Function to execute the genetic algorithm until convergence or no change found
 
         :returns: bool to determine if evaluation should continue as well as details on best performing schedule
         """
