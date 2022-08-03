@@ -465,7 +465,7 @@ class Schedule:
         self, check_boolean: Boolean, check_words: list, check_score: int
     ):
         """
-        Function to check prescence of specific words in specialities list for a student
+        Function to check presence of specific words in specialities list for a student
         """
         if check_boolean:
             check_words_regex = re.compile("|".join(check_words))
