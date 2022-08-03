@@ -234,7 +234,7 @@ class GeneticAlgorithm:
         Function to produce offspring through recombination using a selected set of parents
 
         :param selected_parents: a list of schedules to be used as parents for recombination
-        :returns: no explicit return but population new_schedules class object with recombined schedules
+        :returns: no explicit return but populates new_schedules class object with recombined schedules
         """
         for pair in selected_parents:
             if random.uniform(0, 1) <= self.recombination_probability:
