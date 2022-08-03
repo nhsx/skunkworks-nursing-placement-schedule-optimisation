@@ -75,7 +75,7 @@ class GeneticAlgorithm:
 
     def seed_schedules(self):
         """
-        Function to initiase the first generation of schedules
+        Function to initialise the first generation of schedules
         """
         for i in range(0, self.number_of_schedules):
             schedule_obj = Schedule(
