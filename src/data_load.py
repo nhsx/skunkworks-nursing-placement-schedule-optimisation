@@ -7,7 +7,7 @@ import time
 
 
 class DataLoader:
-    def readData(self, filename):
+    def readData(self, filename: str):
         """
         Function to load data from files and do basic preprocessing and prep
 
@@ -131,7 +131,7 @@ class DataLoader:
             - 1
         )
 
-    def preprocData(self, num_weeks):
+    def preprocData(self, num_weeks: int):
         """
         Function to convert dataframes into lists of Class objects for Genetic Algorithm
 
