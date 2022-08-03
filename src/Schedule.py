@@ -513,8 +513,8 @@ class Schedule:
         the 3rd and 7th indices
 
         :param otherparent: other schedule for recombination to be carried out with
-        :param num_recomb_points: number of crossing over points to be used
-        :param num_offspring: number of offspring to produce
+        :param num_recomb_points: integer number of crossing over points to be used
+        :param num_offspring: integer number of offspring to produce
         :returns: list of recombined schedule objects
         """
         pop_size = len(self.conf_placements)
@@ -568,7 +568,7 @@ class Schedule:
         """
         Function to mutate the location of one of the placements within a schedule
 
-        :param num_mutations: number of mutations to introduce to mutated schedule
+        :param num_mutations: integer number of mutations to introduce to mutated schedule
         :returns: mutated schedule object
         """
         mutation_schedule = copy.copy(self)

@@ -135,7 +135,7 @@ class DataLoader:
         """
         Function to convert dataframes into lists of Class objects for Genetic Algorithm
 
-        :param num_weeks: the number of weeks covered by the schedule
+        :param num_weeks: the integer number of weeks covered by the schedule
         :returns: slots, wards and placements class objects
         """
 

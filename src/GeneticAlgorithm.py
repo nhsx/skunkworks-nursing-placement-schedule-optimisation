@@ -257,7 +257,7 @@ class GeneticAlgorithm:
         """
         Function to prevent population stagnating, introduce proportion of newly generated schedules each round
 
-        :param num_new_schedules: the number of new schedules to be generated/to be replaced in existing population
+        :param num_new_schedules: the integer number of new schedules to be generated/to be replaced in existing population
         :returns: no explicit return but populates new_schedules class object with newly generated schedules
         """
         for i in range(0, num_new_schedules):
