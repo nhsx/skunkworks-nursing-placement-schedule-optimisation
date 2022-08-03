@@ -17,7 +17,7 @@ import os
 import matplotlib.pyplot as plt
 
 
-def main(num_schedules, pop_size):
+def main(num_schedules: int, pop_size: int):
     """
     Function to run Nursing Placement Optimisation tool end-to-end
     :param num_schedules: the overall number of schedules to output from the tool. Can be otherwise thought of as number of times the tool is run
