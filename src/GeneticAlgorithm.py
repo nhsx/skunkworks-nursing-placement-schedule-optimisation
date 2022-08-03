@@ -182,7 +182,7 @@ class GeneticAlgorithm:
         """
         Function to randomly determine which schedules should be mutated
 
-        :returns: no explicity return but populates new_schedules class object
+        :returns: no explicit return but populates new_schedules class object
         """
         self.new_schedules = []
         # Mutate a proportion of the schedules
@@ -258,7 +258,7 @@ class GeneticAlgorithm:
         Function to prevent population stagnating, introduce proportion of newly generated schedules each round
 
         :param num_new_schedules: the number of new schedules to be generated/to be replaced in existing population
-        :returns: no explicit return but population new_schedules class object with newly generated schedules
+        :returns: no explicit return but populates new_schedules class object with newly generated schedules
         """
         for i in range(0, num_new_schedules):
             schedule_obj = Schedule(
@@ -278,7 +278,7 @@ class GeneticAlgorithm:
         """
         Function to using mutated schedules and offspring, replace the least fit schedules
 
-        :returns: no explicity return but replaces lowest scoring schedules in schedules class object with newly generated ones
+        :returns: no explicit return but replaces lowest scoring schedules in schedules class object with newly generated ones
         """
         self.schedules = sorted(self.schedules, key=itemgetter("fitness"))
         # Update schedules of all but the top X %
