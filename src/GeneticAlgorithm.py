@@ -1,3 +1,4 @@
+from xmlrpc.client import Boolean
 from src.Schedule import Schedule
 from operator import itemgetter
 from datetime import datetime
@@ -199,7 +200,7 @@ class GeneticAlgorithm:
                     }
                 )
 
-    def select_parents(self):
+    def select_parents(self) -> int:
         """
         Function to use a roulette wheel approach (i.e. probability of selection is
         proportional to fitness of schedule) to select parents for recombination
@@ -229,7 +230,7 @@ class GeneticAlgorithm:
 
         return selected_parents
 
-    def generate_offspring(self, selected_parents):
+    def generate_offspring(self, selected_parents: list):
         """
         Function to produce offspring through recombination using a selected set of parents
 
@@ -253,7 +254,7 @@ class GeneticAlgorithm:
                         }
                     )
 
-    def culling(self, num_new_schedules):
+    def culling(self, num_new_schedules: int):
         """
         Function to prevent population stagnating, introduce proportion of newly generated schedules each round
 
@@ -291,7 +292,7 @@ class GeneticAlgorithm:
         ):
             self.schedules[i] = self.new_schedules[i]
 
-    def evolve(self):
+    def evolve(self) -> Tuple(bool, object, float, int, list):
         """
         Function to execute the genetic algorithm until convergence or no change found
 
