@@ -17,13 +17,13 @@ import os
 import matplotlib.pyplot as plt
 
 
-def main(num_schedules, pop_size):
+def main(num_schedules: int, pop_size: int):
     """
     Function to run Nursing Placement Optimisation tool end-to-end
-    :params num_schedules: the overall number of schedules to output from the tool. Can be otherwise thought of as number of times the tool is run
-    :params pop_size: the size of the population to be used for each run. This is the number of schedules randomly produced for each run of the tool, which are used as the base to find the best performing schedule from
+    :param num_schedules: the overall integer number of schedules to output from the tool. Can be otherwise thought of as number of times the tool is run
+    :param pop_size: the size of the population to be used for each run. This is the integer number of schedules randomly produced for each run of the tool, which are used as the base to find the best performing schedule from
     
-    Returns a series of .xlsx files, stored in results/ which contain the schedules, as well as a comparison file which shows the scores of each schedule beside each other
+    :returns: A series of .xlsx files, stored in results/ which contain the schedules, as well as a comparison file which shows the scores of each schedule beside each other
     """
 
     st.info(

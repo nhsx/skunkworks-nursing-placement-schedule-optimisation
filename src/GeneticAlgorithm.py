@@ -1,3 +1,4 @@
+from xmlrpc.client import Boolean
 from src.Schedule import Schedule
 from operator import itemgetter
 from datetime import datetime
@@ -18,11 +19,11 @@ class GeneticAlgorithm:
 
     For more detail see documentation at docs/ga.md
     
-    param: slots: A list of all potential placement week positions
-    param: wards: A list of all potential wards that placements can be taken on
-    param: placements: A list of all placements to be allocated
-    param: number_of_schedules: Integer number of schedules to be produced (dictates the population size)
-    param: num_weeks: Integer number of weeks that placements will take place over
+    :param slots: A list of all potential placement week positions
+    :param wards: A list of all potential wards that placements can be taken on
+    :param placements: A list of all placements to be allocated
+    :param number_of_schedules: Integer number of schedules to be produced (dictates the population size)
+    :param num_weeks: Integer number of weeks that placements will take place over
     """
 
     def __init__(
@@ -75,7 +76,7 @@ class GeneticAlgorithm:
 
     def seed_schedules(self):
         """
-        Initiase the first generation of schedules
+        Function to initialise the first generation of schedules
         """
         for i in range(0, self.number_of_schedules):
             schedule_obj = Schedule(
@@ -91,9 +92,11 @@ class GeneticAlgorithm:
                 }
             )
 
-    def viable_schedule_check(self) -> Tuple[bool, list, str, float]:
+    def viable_schedule_check(self) -> Tuple[bool, object, list]:
         """
-        Check whether a viable schedule exists with the prequisite level of fitness
+        Function to check whether a viable schedule exists with the prequisite level of fitness
+
+        :returns: bool to determine whether evaluation should continue, a schedule and a list of schedule fitnesses
         """
         continue_eval = True
         schedule_fitnesses = []
@@ -114,7 +117,9 @@ class GeneticAlgorithm:
 
     def status_update(self):
         """
-        Output status update to demonstrate progress in evolving schedules
+        Function to output status update to demonstrate progress in evolving schedules
+
+        :returns: current count of iterations
         """
         total_schedules = len(self.schedules)
         if self.last_fitness < self.schedules[total_schedules - 1]["fitness"]:
@@ -127,9 +132,11 @@ class GeneticAlgorithm:
         self.iteration_count += 1
         return self.iteration_count
 
-    def no_change_check(self):
+    def no_change_check(self) -> Tuple[bool, object]:
         """
-        Check whether there is a new fittest schedule after another round of evolution
+        Function to check whether there is a new fittest schedule after another round of evolution
+
+        :returns: bool to determine whether evaluation should continue and a schedule
         """
         total_schedules = len(self.schedules)
         continue_eval = True
@@ -152,9 +159,11 @@ class GeneticAlgorithm:
             self.last_fitness = self.schedules[total_schedules - 1]["fitness"]
             return continue_eval, None
 
-    def evaluate(self):
+    def evaluate(self) -> Tuple[bool, object, float, int, list]:
         """
-        Evaluate the fitness of the existing cohort of schedules
+        Function to evaluate the fitness of the existing cohort of schedules
+
+        :returns: bool to determine if evaluation should continue and then details on current best schedule
         """
         (
             continue_eval,
@@ -172,7 +181,9 @@ class GeneticAlgorithm:
 
     def execute_mutation(self):
         """
-        Randomly determines which schedules should be mutated
+        Function to randomly determine which schedules should be mutated
+
+        :returns: no explicit return but populates new_schedules class object
         """
         self.new_schedules = []
         # Mutate a proportion of the schedules
@@ -189,11 +200,12 @@ class GeneticAlgorithm:
                     }
                 )
 
-    def select_parents(self):
+    def select_parents(self) -> int:
         """
-        Using a roulette wheel approach (i.e. probability of selection is
-        proportional to fitness of schedule), parents for recombination
-        are selected
+        Function to use a roulette wheel approach (i.e. probability of selection is
+        proportional to fitness of schedule) to select parents for recombination
+
+        :returns: a list of schedules to be used as parents for recombination
         """
         total_fitness = 0
         population_size = len(self.schedules)
@@ -218,10 +230,12 @@ class GeneticAlgorithm:
 
         return selected_parents
 
-    def generate_offspring(self, selected_parents):
+    def generate_offspring(self, selected_parents: list):
         """
-        Using a selected set of parents, produce offspring through
-        recombination
+        Function to produce offspring through recombination using a selected set of parents
+
+        :param selected_parents: a list of schedules to be used as parents for recombination
+        :returns: no explicit return but populates new_schedules class object with recombined schedules
         """
         for pair in selected_parents:
             if random.uniform(0, 1) <= self.recombination_probability:
@@ -240,9 +254,12 @@ class GeneticAlgorithm:
                         }
                     )
 
-    def culling(self, num_new_schedules):
+    def culling(self, num_new_schedules: int):
         """
-        To prevent population stagnating, introduce proportion of newly generated schedules each round
+        Function to prevent population stagnating, introduce proportion of newly generated schedules each round
+
+        :param num_new_schedules: the integer number of new schedules to be generated/to be replaced in existing population
+        :returns: no explicit return but populates new_schedules class object with newly generated schedules
         """
         for i in range(0, num_new_schedules):
             schedule_obj = Schedule(
@@ -260,7 +277,9 @@ class GeneticAlgorithm:
 
     def update_population(self):
         """
-        Using mutated schedules and offspring, replace the least fit schedules
+        Function to using mutated schedules and offspring, replace the least fit schedules
+
+        :returns: no explicit return but replaces lowest scoring schedules in schedules class object with newly generated ones
         """
         self.schedules = sorted(self.schedules, key=itemgetter("fitness"))
         # Update schedules of all but the top X %
@@ -273,9 +292,11 @@ class GeneticAlgorithm:
         ):
             self.schedules[i] = self.new_schedules[i]
 
-    def evolve(self):
+    def evolve(self) -> Tuple(bool, object, float, int, list):
         """
-        Execute the genetic algorithm until convergence or no change found
+        Function to execute the genetic algorithm until convergence or no change found
+
+        :returns: bool to determine if evaluation should continue as well as details on best performing schedule
         """
         self.new_schedules = []
         self.culling(self.new_schedule_count)
