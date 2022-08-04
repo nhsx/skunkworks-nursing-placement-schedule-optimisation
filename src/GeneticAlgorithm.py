@@ -136,7 +136,7 @@ class GeneticAlgorithm:
         """
         Function to check whether there is a new fittest schedule after another round of evolution
 
-        :retrns: bool to determine whether evaluation should continue and a schedule
+        :returns: bool to determine whether evaluation should continue and a schedule
         """
         total_schedules = len(self.schedules)
         continue_eval = True
