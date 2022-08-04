@@ -118,14 +118,14 @@ class Schedule:
 
         return year_cap
 
-    def calc_slot_index(self, ward_id, num_weeks, start_week):
+    def calc_slot_index(self, ward_id: int, num_weeks: int, start_week: int) -> int:
         """
         Function to calculate the index for the slot based on the id of the ward,
         the total number of weeks the schedule is produced over and
         the start week of the placement
 
         :param ward_id: id of the ward as per original data
-        :param num_weeks: total number of weeks the entire schedule covers
+        :param num_weeks: total integer number of weeks the entire schedule covers
         :param start_week: week number that the placement starts in
         :returns: the id within the slots class object that the placement starts on
         """
@@ -196,7 +196,7 @@ class Schedule:
                 }
             )
 
-    def clean_departments(self, output_string) -> list:
+    def clean_departments(self, output_string: str) -> list:
         """
         Function to clean up a list of department names for analysis. Removes some non-required words.
 
@@ -473,7 +473,7 @@ class Schedule:
                 if check_words_regex.search(assigned_departments):
                     self.add_score(check_score)
 
-    def add_score(self, score):
+    def add_score(self, score: float):
         """
         Function to add score value to all schedule entries
 
@@ -490,7 +490,6 @@ class Schedule:
         placements in the schedule)
 
         :returns: no explicit return but updates slots class object
-        "
         """
         self.slots = [[] for _ in range(len(self.slots))]
         for confirmed_placement in self.conf_placements:
@@ -501,7 +500,7 @@ class Schedule:
         self.get_fitness()
 
     def recombination(
-        self, otherparent: "schedule", num_recomb_points: int, num_offspring: int
+        self, otherparent: object, num_recomb_points: int, num_offspring: int
     ) -> list:
         """
         Function to produce offspring by combining two parent schedules,
@@ -564,7 +563,7 @@ class Schedule:
 
         return offspring_list
 
-    def mutation(self, num_mutations: int) -> "schedule":
+    def mutation(self, num_mutations: int) -> object:
         """
         Function to mutate the location of one of the placements within a schedule
 
@@ -675,7 +674,7 @@ class Schedule:
         schedule_df.to_csv(full_save_path)
         return schedule_df
 
-    def schedule_quality_check(self):
+    def schedule_quality_check(self) -> Tuple(int, int, int, int):
         """
         Function to do some basic checks to make sure all rules have worked as desired
 
