@@ -292,7 +292,7 @@ class GeneticAlgorithm:
         ):
             self.schedules[i] = self.new_schedules[i]
 
-    def evolve(self) -> Tuple(bool, object, float, int, list):
+    def evolve(self) -> Tuple[bool, object, float, int, list]:
         """
         Function to execute the genetic algorithm until convergence or no change found
 

@@ -674,7 +674,7 @@ class Schedule:
         schedule_df.to_csv(full_save_path)
         return schedule_df
 
-    def schedule_quality_check(self) -> Tuple(int, int, int, int):
+    def schedule_quality_check(self) -> Tuple[int, int, int, int]:
         """
         Function to do some basic checks to make sure all rules have worked as desired
 
