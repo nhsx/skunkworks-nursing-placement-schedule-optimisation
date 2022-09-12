@@ -11,6 +11,7 @@ import pandas as pd
 import numpy as np
 from src.data_load import DataLoader
 from src.GeneticAlgorithm import GeneticAlgorithm
+from utils.utils import get_time_now
 import yaml
 from datetime import datetime
 import os
@@ -155,10 +156,9 @@ def main(num_schedules, pop_size):
     except OSError:
         pass  # already exists
 
-    now = datetime.now().strftime("%d_%m_%Y_%H_%M_%S")
+    now = get_time_now()
     file_name = f"schedule_comparison_{now}.csv"
     full_save_path = os.path.join(save_directory, file_name)
-    now = datetime.now().strftime("%d_%m_%Y_%H_%M_%S")
     scheduleCompareDF.to_csv(full_save_path)
     logging.info("Comparison file saved")
     viableBool = False
