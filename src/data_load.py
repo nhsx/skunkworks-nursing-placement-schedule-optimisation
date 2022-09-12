@@ -149,17 +149,15 @@ class DataLoader:
         self.slots = []
         pos = 0
         for item in num_slots:
-            row_contents = []
-            row_contents.extend([pos, str(item)])
+
+            row_contents = [pos, str(item)]
             pos += 1
             slot_item = Slot(row_contents)
             self.slots.append(slot_item)
 
         self.wards = []
         for index, row in self.ward_data.iterrows():
-            row_contents = []
-            row_contents.extend(
-                [
+            row_contents = [
                     index,
                     row.Ward,
                     row.Department,
@@ -170,16 +168,14 @@ class DataLoader:
                     row.P2_CAP,
                     row.P3_CAP,
                 ]
-            )
+            
             ward_item = Ward(row_contents)
             self.wards.append(ward_item)
 
         self.placements = []
         for index, row in self.student_placements.iterrows():
-            row_contents = []
             year_num = row.placement_name.split(",", maxsplit=1)[0]
-            row_contents.extend(
-                [
+            row_contents = [
                     index,
                     str(row.student_id) + "_" + str(row.placement_name),
                     row.student_cohort,
@@ -191,7 +187,6 @@ class DataLoader:
                     row.allprevdeps,
                     row.allowable_covid_status,
                 ]
-            )
             placement_item = Placement(row_contents)
             self.placements.append(placement_item)
 
