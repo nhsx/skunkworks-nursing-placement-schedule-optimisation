@@ -1,5 +1,6 @@
 from xmlrpc.client import Boolean
 from src.Schedule import Schedule
+from utils.utils import get_time_now
 from operator import itemgetter
 from datetime import datetime
 import numpy as np
@@ -92,6 +93,8 @@ class GeneticAlgorithm:
                 }
             )
 
+
+
     def viable_schedule_check(self) -> Tuple[bool, object, list]:
         """
         Function to check whether a viable schedule exists with the prequisite level of fitness
@@ -123,7 +126,7 @@ class GeneticAlgorithm:
         """
         total_schedules = len(self.schedules)
         if self.last_fitness < self.schedules[total_schedules - 1]["fitness"]:
-            now = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+            now = get_time_now()
             self.last_fitness = self.schedules[total_schedules - 1]["fitness"]
             logging.info(
                 f'At {now} the best fitness in generation is schedule {self.schedules[total_schedules - 1]["sched_id"]} with: {self.last_fitness}'

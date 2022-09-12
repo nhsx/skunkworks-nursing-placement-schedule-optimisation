@@ -11,6 +11,7 @@ from typing import Tuple
 import yaml
 import os
 import logging
+from utils.utils import get_time_now
 
 
 class Schedule:
@@ -669,7 +670,7 @@ class Schedule:
         except OSError:
             pass  # already exists
 
-        now = datetime.now().strftime("%d_%m_%Y_%H_%M_%S")
+        now = get_time_now()
         full_save_path = os.path.join(save_directory, f"sched_output_{now}.csv")
         schedule_df.to_csv(full_save_path)
         return schedule_df
@@ -1019,7 +1020,7 @@ class Schedule:
         except OSError:
             pass  # already exists
 
-        now = datetime.now().strftime("%d_%m_%Y_%H_%M_%S")
+        now = get_time_now()
         file_name = f"schedule_output_{now}_{self.generation}_{self.viable}.xlsx"
         self.file_name = file_name
 
