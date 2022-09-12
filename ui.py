@@ -17,13 +17,13 @@ import os
 import matplotlib.pyplot as plt
 
 
-def main(num_schedules: int, pop_size: int):
+def main(num_schedules, pop_size):
     """
     Function to run Nursing Placement Optimisation tool end-to-end
-    :param num_schedules: the overall integer number of schedules to output from the tool. Can be otherwise thought of as number of times the tool is run
-    :param pop_size: the size of the population to be used for each run. This is the integer number of schedules randomly produced for each run of the tool, which are used as the base to find the best performing schedule from
+    :params num_schedules: the overall number of schedules to output from the tool. Can be otherwise thought of as number of times the tool is run
+    :params pop_size: the size of the population to be used for each run. This is the number of schedules randomly produced for each run of the tool, which are used as the base to find the best performing schedule from
     
-    :returns: A series of .xlsx files, stored in results/ which contain the schedules, as well as a comparison file which shows the scores of each schedule beside each other
+    Returns a series of .xlsx files, stored in results/ which contain the schedules, as well as a comparison file which shows the scores of each schedule beside each other
     """
 
     st.info(
@@ -54,14 +54,14 @@ def main(num_schedules: int, pop_size: int):
     )
 
     logging.info(f"Total weeks covered: {num_weeks}")
-    slots, wards, placements = dataload.preprocData(num_weeks)
+    dataload.restructureData(num_weeks)
 
     num_iter = num_schedules
     scheduleCompare = []
     placeholder = st.empty()
     graph_placeholder = st.empty()
     for i in range(num_iter):
-        GA = GeneticAlgorithm(slots, wards, placements, pop_size, num_weeks)
+        GA = GeneticAlgorithm(dataload.slots, dataload.wards, dataload.placements, pop_size, num_weeks)
         GA.seed_schedules()
         (
             continue_eval,
@@ -197,6 +197,14 @@ if page == "Run algorithm":
     if file_source == "Fake data":
         try:
             dataload.readData("data/fake_data.xlsx")
+            dataload.cleanPrevPlacements()
+            dataload.cleanStudentPlacementCohorts()
+            dataload.cleanWardAuditExpCapacity()
+            dataload.cleanSelectWardColumnNames()
+            dataload.cleanStudentsPreviousDepartments()
+            dataload.cleanStudentPreviousWards()
+            dataload.mergeStudentsWithPlacements()
+            dataload.datePreparation()
         except FileNotFoundError:
             logging.exception(f"No fake_data.xlsx file found in the data directory")
     elif file_source == "Your own data":
@@ -209,6 +217,14 @@ if page == "Run algorithm":
         else:
             try:
                 dataload.readData(f"data/{input_file_name}")
+                dataload.datePreparation()
+                dataload.cleanPrevPlacements()
+                dataload.cleanStudentPlacementCohorts()
+                dataload.cleanWardAuditExpCapacity()
+                dataload.cleanSelectWardColumnNames()
+                dataload.cleanStudentsPreviousDepartments()
+                dataload.cleanStudentPreviousWards()
+                dataload.mergeStudentsWithPlacements()
             except FileNotFoundError:
                 logging.exception(
                     f"No file found by the name {input_file_name} in the data directory"
