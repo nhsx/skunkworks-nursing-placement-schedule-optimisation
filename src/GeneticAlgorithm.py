@@ -48,28 +48,20 @@ class GeneticAlgorithm:
         with open("config/params.yml") as f:
             params = yaml.load(f, Loader=yaml.FullLoader)
 
+        ga_params = params["genetic_algorithm_params"]
         self.new_schedule_count = int(
             self.number_of_schedules
-            * params["genetic_algorithm_params"]["new_schedule_prop"]
+            * ga_params["new_schedule_prop"]
         )
 
-        self.mutation_probability = params["genetic_algorithm_params"][
-            "mutationProbability"
-        ]
-        self.recombination_probability = params["genetic_algorithm_params"][
-            "recombinationProbability"
-        ]
-        self.num_mutations = params["genetic_algorithm_params"][
-            "num_mutations"
-        ]  # Note that this is number of mutations per schedule
-        self.recomb_points = params["genetic_algorithm_params"]["recomb_points"]
-        self.max_no_change_iterations = params["genetic_algorithm_params"][
-            "max_no_change_iterations"
-        ]
-        self.fitness_threshold = params["genetic_algorithm_params"]["fitness_threshold"]
-        self.changed_protected_proportion = params["genetic_algorithm_params"][
-            "changed_protected_proportion"
-        ]
+        self.mutation_probability = ga_params["mutationProbability"]
+        self.recombination_probability = ga_params["recombinationProbability"]
+        self.num_mutations = ga_params["num_mutations"]  # Note that this is number of mutations per schedule
+        self.recomb_points = ga_params["recomb_points"]
+
+        self.max_no_change_iterations = ga_params["max_no_change_iterations"]
+        self.fitness_threshold = ga_params["fitness_threshold"]
+        self.changed_protected_proportion = ga_params["changed_protected_proportion"]
 
         self.last_fitness = 0
         self.no_change_count = 0
