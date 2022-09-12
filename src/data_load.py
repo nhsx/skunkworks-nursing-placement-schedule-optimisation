@@ -3,16 +3,14 @@ import numpy as np
 from src.Slot import Slot
 from src.Ward import Ward
 from src.Placement import Placement
-import time
+import warnings
 
 
 class DataLoader:
-    def readData(self, filename: str):
-        """
-        Function to load data from files and do basic preprocessing and prep
 
-        :param filename: name of the .xlsx file in the data folder for input data to be read from
-        :returns: nothing returned by function, various class objects created
+    def readData(self, filename):
+        """
+        Load data from files and do basic preprocessing and prep
         """
 
         # Load relevant files
@@ -20,25 +18,39 @@ class DataLoader:
             filename, sheet_name="students", engine="openpyxl"
         )
         self.ward_data = pd.read_excel(filename, sheet_name="wards", engine="openpyxl")
+
         self.uni_placements = pd.read_excel(
             filename, sheet_name="placements", engine="openpyxl"
         )
 
-        self.students["student_cohort"] = (
-            self.students["university"].astype(str)
+    def createCohort(self,df,cohort_col_name,uni_col_name,qual_col_name,start_col_name):
+        df[cohort_col_name] = (
+            df[uni_col_name].astype(str)
             + "_"
-            + self.students["qualification"].astype(str)
+            + df[qual_col_name].astype(str)
             + " "
-            + self.students["course_start"].astype(str)
+            + df[start_col_name].astype(str)
         )
-        self.uni_placements["student_cohort"] = (
-            self.uni_placements["university"].astype(str)
-            + "_"
-            + self.uni_placements["qualification"].astype(str)
-            + " "
-            + self.uni_placements["course_start"].astype(str)
-        )
+        return df
 
+    def calcRelDateWeeks(self, df, ref_df, output_col_name, calc_date_col, ref_data_col):
+        """"
+        Calculate a date in weeks relative to another date
+        """
+
+        df[output_col_name] = np.round(
+            (
+                pd.to_datetime(df[calc_date_col], yearfirst=True)
+                - pd.to_datetime(
+                    ref_df[ref_data_col].min(), yearfirst=True
+                )
+            )
+            / np.timedelta64(1, "W"),
+            0,
+        )
+        return df
+
+    def cleanPrevPlacements(self):
         # Process student info
         self.students["prev_placements"] = (
             self.students["prev_placements"].str.strip().str.replace("'", "")
@@ -47,21 +59,18 @@ class DataLoader:
             lambda x: x[1:-1].split(",")
         )
 
-        # Process ward info
-        # Calculate audit expiry date week relative to the earliest placement in the file
-        self.ward_data["education_audit_exp_week"] = np.round(
-            (
-                pd.to_datetime(self.ward_data["education_audit_exp"], yearfirst=True)
-                - pd.to_datetime(
-                    self.uni_placements["placement_start_date"].min(), yearfirst=True
-                )
-            )
-            / np.timedelta64(1, "W"),
-            0,
-        )
+    def cleanStudentPlacementCohorts(self):
+        self.students = self.createCohort(self.students,"student_cohort","university","qualification","course_start")
+        self.uni_placements = self.createCohort(self.uni_placements,"student_cohort","university","qualification","course_start")
+
+    def cleanWardAuditExpCapacity(self):
+        self.ward_data = self.calcRelDateWeeks(self.ward_data,self.uni_placements,"education_audit_exp_week", "education_audit_exp", "placement_start_date")
+
         self.ward_data["capacity"] = self.ward_data[["p1_cap", "p2_cap", "p3_cap"]].max(
             axis=1
         )
+
+    def cleanSelectWardColumnNames(self):
         self.ward_data = self.ward_data[
             [
                 "ward_name",
@@ -87,6 +96,7 @@ class DataLoader:
             "P3_CAP",
         ]
 
+    def cleanStudentsPreviousDepartments(self):
         self.ward_dep_match = pd.Series(
             self.ward_data.Department.values, index=self.ward_data.Ward
         ).to_dict()
@@ -98,12 +108,21 @@ class DataLoader:
         self.students["allprevdeps"] = [
             ", ".join(dep_list) for dep_list in self.students["prev_deps"]
         ]
+
+    def cleanStudentPreviousWards(self):
         self.students["allprevwards"] = [
             ", ".join(prev_plac) for prev_plac in self.students["allprevwards"]
         ]
+    
+    def mergeStudentsWithPlacements(self):
         self.student_placements = self.students.merge(
             self.uni_placements, how="left", on="student_cohort"
         )
+
+    def datePreparation(self):
+        """
+        Preprocess date fields in student_placements df
+        """
 
         # Process placement student_placements
         self.student_placements["placement_start_date"] = pd.to_datetime(
@@ -112,31 +131,18 @@ class DataLoader:
         self.student_placements["placement_start_date_raw"] = self.student_placements[
             "placement_start_date"
         ].copy()
-        self.student_placements["placement_start_date"] = np.round(
-            (
-                pd.to_datetime(
-                    self.student_placements["placement_start_date"], yearfirst=True
-                )
-                - pd.to_datetime(
-                    self.student_placements["placement_start_date"].min(),
-                    yearfirst=True,
-                )
-            )
-            / np.timedelta64(1, "W"),
-            0,
-        )
+
+        self.student_placements = self.calcRelDateWeeks(self.student_placements,self.uni_placements,"placement_start_date", "placement_start_date", "placement_start_date")
+
         self.student_placements["placement_end_date"] = (
             self.student_placements["placement_start_date"]
             + self.student_placements["placement_len_weeks"]
             - 1
         )
 
-    def preprocData(self, num_weeks: int):
+    def restructureData(self, num_weeks):
         """
-        Function to convert dataframes into lists of Class objects for Genetic Algorithm
-
-        :param num_weeks: the integer number of weeks covered by the schedule
-        :returns: slots, wards and placements class objects
+        Convert dataframes into lists of Class objects for Genetic Algorithm
         """
 
         num_slots = list(range(1, num_weeks + 1))
@@ -189,15 +195,9 @@ class DataLoader:
             placement_item = Placement(row_contents)
             self.placements.append(placement_item)
 
-        return self.slots, self.wards, self.placements
 
 
 def input_quality_checks(self):
-    """
-    Function to conduct basic checks that data is in required format
-
-    :raises TypeError: raises exception if data is not in correct format
-    """
     try:
         self.students["prev_placements"] = self.students["prev_placements"].astype(list)
     except:
