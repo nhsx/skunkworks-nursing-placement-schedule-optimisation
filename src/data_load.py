@@ -149,7 +149,6 @@ class DataLoader:
         self.slots = []
         pos = 0
         for item in num_slots:
-
             row_contents = [pos, str(item)]
             pos += 1
             slot_item = Slot(row_contents)
