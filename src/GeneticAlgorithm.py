@@ -65,16 +65,20 @@ class GeneticAlgorithm:
         self.last_fitness = 0
         self.no_change_count = 0
 
+    def generate_new_schedule(self):
+        schedule_obj = Schedule(
+                self.slots, self.wards, self.placements, self.num_weeks
+            )
+        schedule_obj.schedule_generation()
+        schedule_obj.get_fitness()
+        return schedule_obj
+
     def seed_schedules(self):
         """
         Function to initialise the first generation of schedules
         """
         for i in range(0, self.number_of_schedules):
-            schedule_obj = Schedule(
-                self.slots, self.wards, self.placements, self.num_weeks
-            )
-            schedule_obj.schedule_generation()
-            schedule_obj.get_fitness()
+            schedule_obj = self.generate_new_schedule()
             self.schedules.append(
                 {
                     "schedule": schedule_obj,
@@ -253,11 +257,7 @@ class GeneticAlgorithm:
         :returns: no explicit return but populates new_schedules class object with newly generated schedules
         """
         for i in range(0, num_new_schedules):
-            schedule_obj = Schedule(
-                self.slots, self.wards, self.placements, self.num_weeks
-            )
-            schedule_obj.schedule_generation()
-            schedule_obj.get_fitness()
+            schedule_obj = self.generate_new_schedule()
             self.new_schedules.append(
                 {
                     "schedule": schedule_obj,
