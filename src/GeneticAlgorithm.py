@@ -58,7 +58,6 @@ class GeneticAlgorithm:
         self.recombination_probability = ga_params["recombinationProbability"]
         self.num_mutations = ga_params["num_mutations"]  # Note that this is number of mutations per schedule
         self.recomb_points = ga_params["recomb_points"]
-
         self.max_no_change_iterations = ga_params["max_no_change_iterations"]
         self.fitness_threshold = ga_params["fitness_threshold"]
         self.changed_protected_proportion = ga_params["changed_protected_proportion"]
