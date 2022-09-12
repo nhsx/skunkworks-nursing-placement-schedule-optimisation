@@ -66,6 +66,9 @@ class GeneticAlgorithm:
         self.no_change_count = 0
 
     def generate_new_schedule(self):
+        """
+        Function to generate new schedule and calculate fitness score
+        """
         schedule_obj = Schedule(
                 self.slots, self.wards, self.placements, self.num_weeks
             )
