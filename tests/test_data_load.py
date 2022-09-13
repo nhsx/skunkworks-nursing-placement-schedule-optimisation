@@ -78,3 +78,14 @@ def test_cleanWardAuditExp():
         })
     dataload.calcWardAuditExp()
     assert dataload.ward_data['education_audit_exp_week'][0] == 17
+
+def test_cleanWardCapacity():
+    dataload = data_load.DataLoader()
+    dataload.ward_data = pd.DataFrame({
+        'p1_cap':[5],
+        'p2_cap':[2],
+        'p3_cap':[3],
+        'capacity':['']
+    })
+    dataload.cleanWardCapacity()
+    assert dataload.ward_data['capacity'][0]==5
