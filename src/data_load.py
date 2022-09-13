@@ -63,7 +63,7 @@ class DataLoader:
         self.students = self.createCohort(self.students,"student_cohort","university","qualification","course_start")
         self.uni_placements = self.createCohort(self.uni_placements,"student_cohort","university","qualification","course_start")
 
-    def cleanWardAuditExp(self):
+    def calcWardAuditExp(self):
         self.ward_data = self.calcRelDateWeeks(self.ward_data,self.uni_placements,"education_audit_exp_week", "education_audit_exp", "placement_start_date")
 
     def cleanWardCapacity(self):
