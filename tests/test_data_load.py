@@ -29,6 +29,24 @@ def test_relative_date_calc():
     date_df = dataload.calcRelDateWeeks(date_df,date_df,'weeks_diff','end_date','start_date')
     assert date_df['weeks_diff'][0] == 2
 
-    date_df = pd.DataFrame([['01/01/2020','15/01/2020']],columns = ['start_date','end_date'])
-    date_df = dataload.calcRelDateWeeks(date_df,date_df,'weeks_diff','start_date','end_date')
-    assert date_df['weeks_diff'][0] == -22
+def test_relative_date_calc_negative_diff():
+    dataload = data_load.DataLoader()
+    date_df = pd.DataFrame(
+        {
+            'start_date':['15/01/2020'],
+            'end_date':['01/01/2020']
+        })
+    date_df = dataload.calcRelDateWeeks(date_df,date_df,'weeks_diff','end_date','start_date')
+    assert date_df['weeks_diff'][0] == -2
+
+
+def test_placement_cleaning():
+    dataload = data_load.DataLoader()
+    dataload.students = pd.DataFrame({
+        'prev_placements':["ward1,ward2,'ward3',ward4"],
+        'allprevwards':['']
+    })
+    dataload.cleanPrevPlacements()
+    print(dataload.students["allprevwards"])
+    assert len(dataload.students["allprevwards"][0]) == len(['ward1','ward2','ward3','ward4'])
+    assert all([a == b for a, b in zip(dataload.students["allprevwards"][0], ['ward1','ward2','ward3','ward4'])])
