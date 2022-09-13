@@ -17,6 +17,17 @@ from datetime import datetime
 import os
 import matplotlib.pyplot as plt
 
+def preproc_data(dataloader,file_location):
+    dataloader.readData(file_location)
+    dataloader.cleanPrevPlacements()
+    dataloader.cleanStudentPlacementCohorts()
+    dataloader.cleanWardAuditExpCapacity()
+    dataloader.cleanSelectWardColumnNames()
+    dataloader.cleanStudentsPreviousDepartments()
+    dataloader.cleanStudentPreviousWards()
+    dataloader.mergeStudentsWithPlacements()
+    dataloader.datePreparation()
+    return dataloader
 
 def main(num_schedules, pop_size):
     """
@@ -196,15 +207,7 @@ if page == "Run algorithm":
 
     if file_source == "Fake data":
         try:
-            dataload.readData("data/fake_data.xlsx")
-            dataload.cleanPrevPlacements()
-            dataload.cleanStudentPlacementCohorts()
-            dataload.cleanWardAuditExpCapacity()
-            dataload.cleanSelectWardColumnNames()
-            dataload.cleanStudentsPreviousDepartments()
-            dataload.cleanStudentPreviousWards()
-            dataload.mergeStudentsWithPlacements()
-            dataload.datePreparation()
+            dataload = preproc_data(dataload,"data/fake_data.xlsx")
         except FileNotFoundError:
             logging.exception(f"No fake_data.xlsx file found in the data directory")
     elif file_source == "Your own data":
@@ -216,15 +219,7 @@ if page == "Run algorithm":
             )
         else:
             try:
-                dataload.readData(f"data/{input_file_name}")
-                dataload.datePreparation()
-                dataload.cleanPrevPlacements()
-                dataload.cleanStudentPlacementCohorts()
-                dataload.cleanWardAuditExpCapacity()
-                dataload.cleanSelectWardColumnNames()
-                dataload.cleanStudentsPreviousDepartments()
-                dataload.cleanStudentPreviousWards()
-                dataload.mergeStudentsWithPlacements()
+                dataload = preproc_data(dataload,f"data/{input_file_name}")
             except FileNotFoundError:
                 logging.exception(
                     f"No file found by the name {input_file_name} in the data directory"
