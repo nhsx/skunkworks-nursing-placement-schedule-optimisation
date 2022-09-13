@@ -89,3 +89,28 @@ def test_cleanWardCapacity():
     })
     dataload.cleanWardCapacity()
     assert dataload.ward_data['capacity'][0]==5
+
+def test_cleanSelectWardColumnNames():
+    dataload = data_load.DataLoader()
+    dataload.ward_data = pd.DataFrame(None, columns = ["ward_name",
+                "ward_speciality",
+                "education_audit_exp",
+                "education_audit_exp_week",
+                "covid_status",
+                "capacity",
+                "p1_cap",
+                "p2_cap",
+                "p3_cap",])
+    dataload.cleanSelectWardColumnNames()
+    intended_col_names = [
+            "Ward",
+            "Department",
+            "education_audit_exp",
+            "education_audit_exp_week",
+            "covid_status",
+            "capacity",
+            "P1_CAP",
+            "P2_CAP",
+            "P3_CAP",
+        ]
+    assert all([a == b for a, b in zip(dataload.ward_data.columns, intended_col_names)])
