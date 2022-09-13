@@ -50,3 +50,31 @@ def test_placement_cleaning():
     print(dataload.students["allprevwards"])
     assert len(dataload.students["allprevwards"][0]) == len(['ward1','ward2','ward3','ward4'])
     assert all([a == b for a, b in zip(dataload.students["allprevwards"][0], ['ward1','ward2','ward3','ward4'])])
+
+def test_cleanStudentPlacementCohorts():
+    dataload = data_load.DataLoader()
+    cohort_df = pd.DataFrame(
+        {
+            'university':['uni'],
+            'qualification':['qual'],
+            'course_start':['start']
+        })
+    dataload.students = cohort_df
+    dataload.uni_placements = cohort_df
+    dataload.cleanStudentPlacementCohorts()
+
+    assert dataload.students['student_cohort'][0] == 'uni_qual start'
+    assert dataload.uni_placements['student_cohort'][0] == 'uni_qual start'
+
+def test_cleanWardAuditExp():
+    dataload = data_load.DataLoader()
+    dataload.ward_data = pd.DataFrame(
+        {
+            'education_audit_exp':['2020/01/15']
+        })
+    dataload.uni_placements = pd.DataFrame(
+        {
+            'placement_start_date':['2020/01/01','2020/02/30','2019/09/15'],
+        })
+    dataload.calcWardAuditExp()
+    assert dataload.ward_data['education_audit_exp_week'][0] == 17
