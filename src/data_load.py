@@ -56,7 +56,7 @@ class DataLoader:
             self.students["prev_placements"].str.strip().str.replace("'", "")
         )
         self.students["allprevwards"] = self.students.prev_placements.apply(
-            lambda x: x[1:-1].split(",")
+            lambda x: x.split(",")
         )
 
     def cleanStudentPlacementCohorts(self):
