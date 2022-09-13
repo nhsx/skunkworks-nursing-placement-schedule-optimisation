@@ -128,3 +128,11 @@ def test_cleanStudentsPreviousDepartments():
     })
     dataload.cleanStudentsPreviousDepartments()
     assert dataload.students["allprevdeps"][0] == 'DepartmentD, DepartmentB'
+
+def test_cleanStudentPreviousWards():
+    dataload = data_load.DataLoader()
+    dataload.students = pd.DataFrame({
+        'allprevwards':[['WardA','WardC','WardD']]
+    })
+    dataload.cleanStudentPreviousWards()
+    assert dataload.students['allprevwards'][0] == 'WardA, WardC, WardD'
