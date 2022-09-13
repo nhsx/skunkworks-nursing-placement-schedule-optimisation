@@ -114,3 +114,17 @@ def test_cleanSelectWardColumnNames():
             "P3_CAP",
         ]
     assert all([a == b for a, b in zip(dataload.ward_data.columns, intended_col_names)])
+
+def test_cleanStudentsPreviousDepartments():
+    dataload = data_load.DataLoader()
+    dataload.ward_data = pd.DataFrame({
+        'Ward':['WardA','WardB','WardC'],
+        'Department':['DepartmentD','DepartmentB','DepartmentC']
+    })
+    dataload.students = pd.DataFrame({
+        'allprevwards':[['WardA','WardB']],
+        'prevdeps':[''],
+        'allprevdeps':['']
+    })
+    dataload.cleanStudentsPreviousDepartments()
+    assert dataload.students["allprevdeps"][0] == 'DepartmentD, DepartmentB'
