@@ -141,7 +141,7 @@ class DataLoader:
             - 1
         )
 
-    def restructureData(self, num_weeks):
+    def restructureData(self, num_weeks: int):
         """
         Convert dataframes into lists of Class objects for Genetic Algorithm
         """
