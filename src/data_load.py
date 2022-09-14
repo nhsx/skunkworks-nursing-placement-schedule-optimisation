@@ -221,17 +221,17 @@ def input_quality_checks(self):
 
     date_dict = {
         "Wards": ["education_audit_exp"],
-        "Placements": ["placement_start_date"],
+        "Placements": ["placement_start_date"]
     }
     for tab, list in date_dict.values():
         for col in list:
             try:
                 if tab == "Students":
-                    self.students[col] = self.students[col].astype(int)
+                    self.students[col] = pd.to_datetime(self.students[col],yearfirst=True)
                 elif tab == "Wards":
-                    self.wards[col] = self.wards[col].astype(int)
+                    self.wards[col] = pd.to_datetime(self.wards[col],yearfirst=True)
                 elif tab == "Placements":
-                    self.uni_placements[col] = self.uni_placements[col].astype(int)
+                    self.uni_placements[col] = pd.to_datetime(self.uni_placements[col],yearfirst=True)
             except:
                 raise TypeError(
                     f"{col} column in {tab} tab contains entries which are not datetime and/or in the correct format of YYYY-MM-DD"
