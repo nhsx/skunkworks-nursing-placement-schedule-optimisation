@@ -206,6 +206,24 @@ def test_restructureData():
     assert len(dataload.placements) == 2
     assert dataload.placements[1].start_date == '2020/01/22'
 
+def test_val_date_datatype():
+    dataload = data_load.DataLoader()
+    col_dict = {"Placements": ["placement_start_date"]}
+    dataload.placements = pd.DataFrame({
+        'placement_start_date':['20th January 2019']
+    })
+    with pytest.raises(TypeError):
+        dataload.val_date_datatype(col_dict)
+        
+def test_val_other_datatype():
+    dataload = data_load.DataLoader()
+    col_dict = {"Students": ["year"]}
+    dataload.placements = pd.DataFrame({
+        'year':['2']
+    })
+    with pytest.raises(TypeError):
+        dataload.val_other_datatype(col_dict, 'int')
+
 def test_input_quality_checks_int_check():
     dataload = data_load.DataLoader()
     dataload.students = pd.DataFrame({
