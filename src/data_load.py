@@ -190,49 +190,67 @@ class DataLoader:
             placement_item = Placement(row_contents)
             self.placements.append(placement_item)
 
+    def val_date_datatype(self, col_dict: dict):
+        for tab, list in col_dict.items():
+            for col in list:
+                try:
+                    if tab == "Students":
+                        self.students[col] = pd.to_datetime(self.students[col],yearfirst=True)
+                    elif tab == "Wards":
+                        self.wards[col] = pd.to_datetime(self.wards[col],yearfirst=True)
+                    elif tab == "Placements":
+                        self.uni_placements[col] = pd.to_datetime(self.uni_placements[col],yearfirst=True)
+                except:
+                    raise TypeError(
+                        f"{col} column in {tab} tab contains entries which are not datetime and/or in the correct format of YYYY-MM-DD"
+                    )
+
+    def val_other_datatype(self, col_dict: dict, datatype: str):
+        for tab, list in col_dict.items():
+            for col in list:
+                try:
+                    if tab == "Students":
+                        self.students[col] = self.students[col].astype(datatype)
+                    elif tab == "Wards":
+                        self.wards[col] = self.wards[col].astype(datatype)
+                    elif tab == "Placements":
+                        self.uni_placements[col] = self.uni_placements[col].astype(datatype)
+                except:
+                    raise TypeError(
+                        f"{col} column in {tab} tab contains entries which are not {datatype}"
+                    )
+
+    def check_col_datatype (self, col_dict: dict, datatype: str):
+        datatype_list = ['str','int','float','list','dict','tuple','bool','date']
+        if datatype not in datatype_list:
+            raise ValueError(
+                f"{datatype} is not a valid data type, please enter one of {datatype_list.join(', ')}"
+            )
+        elif datatype == 'date':
+            self.val_date_datatype(col_dict)
+        else:
+            self.val_other_datatype(col_dict, datatype)
+
+    def input_quality_checks(self):
+        try:
+            self.students["prev_placements"] = self.students["prev_placements"].astype(list)
+        except:
+            raise TypeError(
+                "Previous placements contains entries which are not in a list format e.g. ['ward1','ward2','ward3']"
+            )
+
+        int_dict = {
+            "Students": ["year"],
+            "Wards": ["capacity_num", "p1_cap", "p2_cap", "p3_cap"],
+            "Placements": ["placement_len_weeks"],
+        }
+        self.check_col_datatype(int_dict, 'int')
+
+        date_dict = {
+            "Wards": ["education_audit_exp"],
+            "Placements": ["placement_start_date"]
+        }
+
+        self.check_col_datatype(date_dict,'date')
 
 
-def input_quality_checks(self):
-    try:
-        self.students["prev_placements"] = self.students["prev_placements"].astype(list)
-    except:
-        raise TypeError(
-            "Previous placements contains entries which are not in a list format e.g. ['ward1','ward2','ward3']"
-        )
-
-    int_dict = {
-        "Students": ["year"],
-        "Wards": ["capacity_num", "p1_cap", "p2_cap", "p3_cap"],
-        "Placements": ["placement_len_weeks"],
-    }
-    for tab, list in int_dict.values():
-        for col in list:
-            try:
-                if tab == "Students":
-                    self.students[col] = self.students[col].astype(int)
-                elif tab == "Wards":
-                    self.wards[col] = self.wards[col].astype(int)
-                elif tab == "Placements":
-                    self.uni_placements[col] = self.uni_placements[col].astype(int)
-            except:
-                raise TypeError(
-                    f"{col} column in {tab} tab contains entries which are not integers (e.g. whole numbers)"
-                )
-
-    date_dict = {
-        "Wards": ["education_audit_exp"],
-        "Placements": ["placement_start_date"]
-    }
-    for tab, list in date_dict.values():
-        for col in list:
-            try:
-                if tab == "Students":
-                    self.students[col] = pd.to_datetime(self.students[col],yearfirst=True)
-                elif tab == "Wards":
-                    self.wards[col] = pd.to_datetime(self.wards[col],yearfirst=True)
-                elif tab == "Placements":
-                    self.uni_placements[col] = pd.to_datetime(self.uni_placements[col],yearfirst=True)
-            except:
-                raise TypeError(
-                    f"{col} column in {tab} tab contains entries which are not datetime and/or in the correct format of YYYY-MM-DD"
-                )
