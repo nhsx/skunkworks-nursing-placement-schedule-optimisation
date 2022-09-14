@@ -1,5 +1,6 @@
 from src import data_load
 import pandas as pd
+import numpy as np
 
 def test_readData():
     dataload = data_load.DataLoader()
@@ -136,3 +137,19 @@ def test_cleanStudentPreviousWards():
     })
     dataload.cleanStudentPreviousWards()
     assert dataload.students['allprevwards'][0] == 'WardA, WardC, WardD'
+
+def test_mergeStudentsWithPlacements():
+    dataload = data_load.DataLoader()
+    dataload.students = pd.DataFrame({
+        'student_cohort':['CohortA','CohortB','CohortC']
+    })
+
+    dataload.uni_placements = pd.DataFrame({
+        'student_cohort':['CohortA','CohortB','CohortC'],
+        'placement_details':['Placement1','Placement2','Placement3']
+    })
+
+    dataload.mergeStudentsWithPlacements()
+    print(dataload.student_placements['placement_details'].values)
+    assert all([a == b for a, b in zip(dataload.student_placements['placement_details'].values, ['Placement1','Placement2','Placement3'])])
+
