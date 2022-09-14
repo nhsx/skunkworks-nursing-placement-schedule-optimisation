@@ -153,3 +153,54 @@ def test_mergeStudentsWithPlacements():
     print(dataload.student_placements['placement_details'].values)
     assert all([a == b for a, b in zip(dataload.student_placements['placement_details'].values, ['Placement1','Placement2','Placement3'])])
 
+def test_datePreparation():
+    dataload = data_load.DataLoader()
+    dataload.student_placements = pd.DataFrame({
+        'placement_start_date': ['2020/01/01','2020/01/22'],
+        'placement_len_weeks':[2,1]
+    })
+    dataload.uni_placements = pd.DataFrame({
+        'placement_start_date': ['2019/01/01','2019/01/22']
+    })
+
+    dataload.datePreparation()
+
+    assert all([a == b for a, b in zip(dataload.student_placements['placement_end_date'].values, [53,55])])
+
+def test_restructureData():
+    dataload = data_load.DataLoader()
+    num_weeks = 5
+
+    dataload.ward_data = pd.DataFrame({
+        'Ward':['WardA','WardB','WardC'],
+        'Department':['DepartmentD','DepartmentB','DepartmentC'],
+        'education_audit_exp_week':[5,6,7],
+        'covid_status':['Low/Medium','Medium/High','Low/Medium'],
+        'capacity':[2,2,2],
+        'P1_CAP':[2,1,2],
+        'P2_CAP':[1,2,2],
+        'P3_CAP':[2,2,1]
+    })
+
+    dataload.student_placements = pd.DataFrame({
+        'student_id':[0,1],
+        'placement_name':['PlacementA','PlacementB'],
+        'student_cohort':['CohortA','CohortB'],
+        'placement_len_weeks':[2,1],
+        'placement_start_date': [5,8],
+        'placement_start_date_raw': ['2020/01/01','2020/01/22'],
+        'year_num':[1,1],
+        'allprevwards': ['WardA, WardB','WardC, WardD'],
+        'allprevdeps': ['DepA, DepB','DepC'],
+        'allowable_covid_status': ['Medium/High','Medium/High']
+        })
+    dataload.restructureData(num_weeks)
+
+    assert len(dataload.slots) == 5
+    assert dataload.slots[3].id == 3    
+
+    assert len(dataload.ward_data) == 3
+    assert dataload.wards[1].covid_status == 'Medium/High'
+
+    assert len(dataload.placements) == 2
+    assert dataload.placements[1].start_date == '2020/01/22'
