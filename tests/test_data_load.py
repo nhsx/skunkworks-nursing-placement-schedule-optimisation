@@ -1,6 +1,7 @@
 from src import data_load
 import pandas as pd
 import numpy as np
+import pytest
 
 def test_readData():
     dataload = data_load.DataLoader()
@@ -205,7 +206,29 @@ def test_restructureData():
     assert len(dataload.placements) == 2
     assert dataload.placements[1].start_date == '2020/01/22'
 
-def test_input_quality_checks():
+def test_input_quality_checks_int_check():
+    dataload = data_load.DataLoader()
+    dataload.students = pd.DataFrame({
+        'prev_placements': ['[Placement1, Placement2, Placement3]'],
+        'year':[3]
+    })
+    dataload.wards = pd.DataFrame({
+        'capacity_num': [3],
+        'p1_cap': [2], 
+        'p2_cap': ['2'], 
+        'p3_cap': [3],
+        'education_audit_exp': ['2020/05/01']
+    })
+    dataload.uni_placements = pd.DataFrame({
+        'placement_len_weeks': [5],
+        'placement_start_date': ['2020/01/01']
+    })
+
+    with pytest.raises(TypeError):
+        dataload.input_quality_checks()
+
+
+def test_input_quality_checks_date_check():
     dataload = data_load.DataLoader()
     dataload.students = pd.DataFrame({
         'prev_placements': ['[Placement1, Placement2, Placement3]'],
@@ -216,9 +239,12 @@ def test_input_quality_checks():
         'p1_cap': [2], 
         'p2_cap': [2], 
         'p3_cap': [3],
-        'education_audit_exp': ['2020/05/01']
+        'education_audit_exp': ['20th January 2019']
     })
     dataload.uni_placements = pd.DataFrame({
         'placement_len_weeks': [5],
         'placement_start_date': ['2020/01/01']
     })
+
+    with pytest.raises(TypeError):
+        dataload.input_quality_checks()
