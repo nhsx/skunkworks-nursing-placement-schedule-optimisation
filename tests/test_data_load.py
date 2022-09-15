@@ -252,12 +252,16 @@ def test_restructure_data():
     assert len(dataload.placements) == 2
     assert dataload.placements[1].start_date == '2020/01/22'
 
-def test_val_date_datatype():
+val_date_data = [{'col_dict': {"Students": ["no_col_available"]}, 'col_data': pd.DataFrame({'no_col_available':['abc']})},
+                {'col_dict': {"Wards": ["education_audit_exp"]}, 'col_data': pd.DataFrame({'education_audit_exp':['20th January 2019']})},
+                {'col_dict': {"Placements": ["placement_start_date"]}, 'col_data': pd.DataFrame({'placement_start_date':['20th January 2019']})},
+        ]
+
+@pytest.mark.parametrize('param_input', val_date_data)
+def test_val_date_datatype(param_input):
     dataload = data_load.DataLoader()
-    col_dict = {"Placements": ["placement_start_date"]}
-    dataload.placements = pd.DataFrame({
-        'placement_start_date':['20th January 2019']
-    })
+    col_dict = param_input['col_dict']
+    dataload.placements = param_input['col_data']
     with pytest.raises(TypeError):
         dataload.val_date_datatype(col_dict)
 
