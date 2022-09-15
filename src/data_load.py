@@ -245,7 +245,7 @@ class DataLoader:
         datatype_list = ['str','int','float','list','dict','tuple','bool','date']
         if datatype not in datatype_list:
             raise ValueError(
-                f"{datatype} is not a valid data type, please enter one of {datatype_list.join(', ')}"
+                f"{datatype} is not a valid data type, please enter one of {', '.join(datatype_list)}"
             )
         elif datatype == 'date':
             self.val_date_datatype(col_dict)
