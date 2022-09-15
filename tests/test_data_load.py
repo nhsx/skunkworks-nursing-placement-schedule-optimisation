@@ -265,14 +265,33 @@ def test_val_date_datatype(param_input):
     with pytest.raises(TypeError):
         dataload.val_date_datatype(col_dict)
 
-def test_val_other_datatype():
+val_other_data = [{'col_dict': {"Students": ["year"]}, 'col_data': pd.DataFrame({'year':['2']})},
+                {'col_dict': {"Wards": ["capacity_num"]}, 'col_data': pd.DataFrame({'capacity_num':['5']})},
+                {'col_dict': {"Placements": ["placement_len_weeks"]}, 'col_data': pd.DataFrame({'placement_len_weeks':['3']})},
+        ]
+
+@pytest.mark.parametrize('param_input',val_other_data)
+def test_val_other_datatype(param_input):
     dataload = data_load.DataLoader()
-    col_dict = {"Students": ["year"]}
-    dataload.placements = pd.DataFrame({
-        'year':['2']
-    })
+    col_dict = param_input['col_dict']
+    dataload.placements = param_input['col_data']
     with pytest.raises(TypeError):
         dataload.val_other_datatype(col_dict, 'int')
+
+check_col_data = [{'col_dict': {'Wards':["capacity_num"]}, 'col_data': pd.DataFrame({'capacity_num':['5']}), 'data_type':'complexint'},
+                {'col_dict': {"Wards": ["capacity_num"]}, 'col_data': pd.DataFrame({'capacity_num':['5']}), 'data_type':'int'},
+                {'col_dict': {"Wards": ["education_audit_exp"]}, 'col_data': pd.DataFrame({'education_audit_exp':['5th August 2020']}), 'data_type':'date'}
+]
+
+@pytest.mark.parametrize('param_input',check_col_data)
+def test_check_col_datatype(param_input):
+    dataload = data_load.DataLoader()
+    col_dict = param_input['col_dict']
+    req_datatype = param_input['data_type']
+    dataload.Wards = param_input['col_data']
+    with pytest.raises(Exception):
+        dataload.check_col_datatype(col_dict,req_datatype)
+    
 
 def test_input_quality_checks_int_check():
     dataload = data_load.DataLoader()
