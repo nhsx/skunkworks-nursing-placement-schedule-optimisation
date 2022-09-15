@@ -140,12 +140,13 @@ class DataLoader:
             + self.student_placements["placement_len_weeks"]
             - 1
         )
-
-    def restructureData(self, num_weeks: int):
+    
+    def restructure_slots(self, num_weeks: int):
         """
-        Convert dataframes into lists of Class objects for Genetic Algorithm
-        """
+        Function to create a list of Slot objects for placements to be inserted into
 
+        :param num_weeks: the numbers of weeks covered by the schedule to be optimised
+        """
         num_slots = list(range(1, num_weeks + 1))
         self.slots = []
         pos = 0
@@ -155,6 +156,10 @@ class DataLoader:
             slot_item = Slot(row_contents)
             self.slots.append(slot_item)
 
+    def restructure_wards(self):
+        """
+        Function to create a list of Ward objects for placements to be assigned to
+        """
         self.wards = []
         for index, row in self.ward_data.iterrows():
             row_contents = [
@@ -172,6 +177,10 @@ class DataLoader:
             ward_item = Ward(row_contents)
             self.wards.append(ward_item)
 
+    def restructure_placements(self):
+        """
+        FUnction to create list of Placement objects to be assigned later
+        """
         self.placements = []
         for index, row in self.student_placements.iterrows():
             year_num = row.placement_name.split(",", maxsplit=1)[0]
@@ -189,6 +198,18 @@ class DataLoader:
                 ]
             placement_item = Placement(row_contents)
             self.placements.append(placement_item)
+
+    def restructure_data(self, num_weeks: int):
+        """
+        Convert dataframes into lists of Class objects for Genetic Algorithm
+        """
+
+        self.restructure_slots(num_weeks)
+        self.restructure_wards()
+        self.restructure_placements()
+
+
+        
 
     def val_date_datatype(self, col_dict: dict):
         for tab, list in col_dict.items():
