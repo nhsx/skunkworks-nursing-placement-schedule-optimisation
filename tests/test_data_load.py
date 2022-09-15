@@ -168,7 +168,53 @@ def test_datePreparation():
 
     assert all([a == b for a, b in zip(dataload.student_placements['placement_end_date'].values, [53,55])])
 
-def test_restructureData():
+def test_restructure_slots():
+    dataload = data_load.DataLoader()
+    num_weeks = 2
+    dataload.restructure_slots(num_weeks)
+    
+    assert len(dataload.slots) == 2
+    assert dataload.slots[0].week == '1'
+
+def test_restructure_wards():
+    dataload = data_load.DataLoader()
+    dataload.ward_data = pd.DataFrame({
+        'Ward':['WardA'],
+        'Department':['DepartmentD'],
+        'education_audit_exp_week':[5],
+        'covid_status':['Low/Medium'],
+        'capacity':[2],
+        'P1_CAP':[2],
+        'P2_CAP':[1],
+        'P3_CAP':[2]
+    })
+
+    dataload.restructure_wards()
+    
+    assert len(dataload.wards) == 1
+    assert dataload.wards[0].department == 'DepartmentD'
+
+def test_restructure_placements():
+    dataload = data_load.DataLoader()
+    dataload.student_placements = pd.DataFrame({
+        'student_id':[0,1],
+        'placement_name':['PlacementA','PlacementB'],
+        'student_cohort':['CohortA','CohortB'],
+        'placement_len_weeks':[2,1],
+        'placement_start_date': [5,8],
+        'placement_start_date_raw': ['2020/01/01','2020/01/22'],
+        'year_num':[1,1],
+        'allprevwards': ['WardA, WardB','WardC, WardD'],
+        'allprevdeps': ['DepA, DepB','DepC'],
+        'allowable_covid_status': ['Medium/High','Medium/High']
+        })
+
+    dataload.restructure_placements()
+    
+    assert len(dataload.placements) == 2
+    assert dataload.placements[1].start == 8
+
+def test_restructure_data():
     dataload = data_load.DataLoader()
     num_weeks = 5
 
@@ -195,7 +241,7 @@ def test_restructureData():
         'allprevdeps': ['DepA, DepB','DepC'],
         'allowable_covid_status': ['Medium/High','Medium/High']
         })
-    dataload.restructureData(num_weeks)
+    dataload.restructure_data(num_weeks)
 
     assert len(dataload.slots) == 5
     assert dataload.slots[3].id == 3    
@@ -214,7 +260,7 @@ def test_val_date_datatype():
     })
     with pytest.raises(TypeError):
         dataload.val_date_datatype(col_dict)
-        
+
 def test_val_other_datatype():
     dataload = data_load.DataLoader()
     col_dict = {"Students": ["year"]}
