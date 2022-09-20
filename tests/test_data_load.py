@@ -296,13 +296,13 @@ def test_check_col_datatype(param_input):
 def test_input_quality_checks_int_check():
     dataload = data_load.DataLoader()
     dataload.students = pd.DataFrame({
-        'prev_placements': ['[Placement1, Placement2, Placement3]'],
+        'prev_placements': [['Placement1', 'Placement2', 'Placement3']],
         'year':[3]
     })
     dataload.wards = pd.DataFrame({
         'capacity_num': [3],
         'p1_cap': [2], 
-        'p2_cap': ['2'], 
+        'p2_cap': ['two'], 
         'p3_cap': [3],
         'education_audit_exp': ['2020/05/01']
     })
@@ -311,14 +311,15 @@ def test_input_quality_checks_int_check():
         'placement_start_date': ['2020/01/01']
     })
 
-    with pytest.raises(TypeError):
+    with pytest.raises(TypeError) as exception_info:
         dataload.input_quality_checks()
+    assert str(exception_info.value) == 'p2_cap column in Wards tab contains entries which are not int'
 
 
 def test_input_quality_checks_date_check():
     dataload = data_load.DataLoader()
     dataload.students = pd.DataFrame({
-        'prev_placements': ['[Placement1, Placement2, Placement3]'],
+        'prev_placements': [['Placement1', 'Placement2', 'Placement3']],
         'year':[3]
     })
     dataload.wards = pd.DataFrame({
@@ -326,12 +327,34 @@ def test_input_quality_checks_date_check():
         'p1_cap': [2], 
         'p2_cap': [2], 
         'p3_cap': [3],
-        'education_audit_exp': ['20th January 2019']
+        'education_audit_exp': ['January']
+    })
+    dataload.uni_placements = pd.DataFrame({
+        'placement_len_weeks': [5],
+        'placement_start_date': ['2020/01/01']
+    })
+    with pytest.raises(TypeError) as exception_info:
+        dataload.input_quality_checks()
+    assert str(exception_info.value) == 'education_audit_exp column in Wards tab contains entries which are not datetime and/or in the correct format of YYYY-MM-DD'
+
+def test_input_quality_checks_list_bracket_check():
+    dataload = data_load.DataLoader()
+    dataload.students = pd.DataFrame({
+            'prev_placements': ['Ward1,Ward2'],
+            'year':[3]
+    })
+    dataload.wards = pd.DataFrame({
+        'capacity_num': [3],
+        'p1_cap': [2], 
+        'p2_cap': [2], 
+        'p3_cap': [3],
+        'education_audit_exp': ['2020/01/20']
     })
     dataload.uni_placements = pd.DataFrame({
         'placement_len_weeks': [5],
         'placement_start_date': ['2020/01/01']
     })
 
-    with pytest.raises(TypeError):
+    with pytest.raises(TypeError) as exception_info:
         dataload.input_quality_checks()
+    assert str(exception_info.value) == "Previous placements contains entries which are not in a list format e.g. ['ward1','ward2','ward3']. You are missing an opening or closing brackets e.g. ["
