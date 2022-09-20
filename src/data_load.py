@@ -253,12 +253,17 @@ class DataLoader:
             self.val_other_datatype(col_dict, datatype)
 
     def input_quality_checks(self):
-        try:
-            self.students["prev_placements"] = self.students["prev_placements"].astype(list)
-        except:
+        self.students['prev_p_first_val'] = self.students['prev_placements'].astype(str).str[0]
+        self.students['prev_p_last_val'] = self.students['prev_placements'].astype(str).str[-1]
+
+        if len(self.students[~self.students.prev_p_first_val.str.contains('\[')]) > 0 or len(self.students[~self.students.prev_p_last_val.str.contains('\]')]) > 0:
             raise TypeError(
-                "Previous placements contains entries which are not in a list format e.g. ['ward1','ward2','ward3']"
+                "Previous placements contains entries which are not in a list format e.g. ['ward1','ward2','ward3']. You are missing an opening or closing brackets e.g. ["
             )
+        else:
+            self.students["prev_placements"] = self.students["prev_placements"].astype(str)
+            self.students["prev_placements"] = self.students["prev_placements"].str.strip('[]').str.split(',')
+
 
         int_dict = {
             "Students": ["year"],
