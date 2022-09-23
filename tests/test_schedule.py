@@ -52,6 +52,17 @@ def test_no_wards_covid_schedule_generation():
     with pytest.raises(RuntimeError):
         sch.schedule_generation()
 
-
+def test_no_cap_schedule_generation():
+    wards = [Ward([0, 'WardA', 'DepartmentB', 4, 'Low/Medium', 2, 0, 1, 0]),Ward([1, 'WardB', 'DepartmentA', 1, 'Low/Medium', 2, 0, 1, 0])]
+    placements = [Placement([0, 'A_P1,E1', 'CohortA', 2, 1, '2020/01/01', 'P2', ['list'], ['list'], 'Medium/High'])]
+    slots = [Slot([0,'1']),Slot([1,'2']),Slot([2,'3']),Slot([3,'4'])]
+    sch = Schedule.Schedule(slots = slots, wards = wards, placements = placements, num_weeks = 4)
+    print(sch.slots)
+    print(len(sch.slots))
+    sch.slots[2].append(placements[0])
+    sch.slots[6].append(placements[0])
+    print(sch.slots)
+    with pytest.raises(RuntimeError):
+        sch.schedule_generation()
 
     
