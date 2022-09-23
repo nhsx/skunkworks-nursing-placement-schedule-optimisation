@@ -65,4 +65,8 @@ def test_no_cap_schedule_generation():
     with pytest.raises(RuntimeError):
         sch.schedule_generation()
 
-    
+def test_clean_departments():
+    sch = Schedule.Schedule(slots = [1,2,3], wards = [1,2,3], placements = [1,2,3], num_weeks = 5)
+    cleaned_deps = sch.clean_departments('eneral Department, DepartmentC, DepartmentA, Depart\xa0mentE, None')
+    print(cleaned_deps)
+    assert all([a == b for a, b in zip(cleaned_deps, ['general','department','departmentc','departmenta','departmente'])])
