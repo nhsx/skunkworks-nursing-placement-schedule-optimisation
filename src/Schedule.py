@@ -146,9 +146,13 @@ class Schedule:
             invalid_ward = True
 
             # Find a ward which valid based on capacity and education audit
+            ward_ids = set()
             while invalid_ward:
+                if len(ward_ids) == len(self.wards):
+                    raise RuntimeError('No valid ward is available for placement to be allocated to')
                 invalid_ward = False
                 ward_id = randint(0, len(self.wards) - 1)
+                ward_ids.add(ward_id)
                 slot_index_increment = self.calc_slot_index(
                     ward_id, self.num_weeks, p.start
                 )
@@ -176,7 +180,6 @@ class Schedule:
                                     same_year_count += 1
                             if same_year_count >= year_cap:
                                 invalid_ward = True
-                                break
                             if invalid_ward:
                                 break
                         slot_index_increment += 1
