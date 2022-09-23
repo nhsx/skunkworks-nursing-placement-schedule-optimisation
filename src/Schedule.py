@@ -215,13 +215,14 @@ class Schedule:
             "eneral": "general",
             "None": "",
             "-": "",
-            "\xa0": " ",
+            "\xa0": "",
             "  ": " ",
         }
         for word, replacement in replace_dict.items():
             output_string = output_string.replace(word, replacement)
         output_string = output_string.lower()
         output_list = output_string.split(" ")
+        output_list = list(filter(None, output_list))
         return output_list
 
     def get_fitness(self):
