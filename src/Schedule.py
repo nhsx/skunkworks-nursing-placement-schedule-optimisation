@@ -458,10 +458,8 @@ class Schedule:
                 * self.critical_care_placement_scoring_factor
             )  # High Dependency ward component
         )
-        if len(self.conf_placements):
-            self.fitness = float(self.schedule_scores) / max_score
-        else:
-            self.fitness = 0
+        self.fitness = float(self.schedule_scores) / max_score
+
 
         if self.viable is None:
             self.viable = True
