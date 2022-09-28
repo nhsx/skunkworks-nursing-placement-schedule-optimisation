@@ -473,8 +473,10 @@ class Schedule:
         if check_boolean:
             check_words_regex = re.compile("|".join(check_words))
             for assigned_departments in self.placement_deps.values():
-                if check_words_regex.search(assigned_departments):
-                    self.add_score(check_score)
+                print(assigned_departments)
+                for dep in assigned_departments:
+                    if check_words_regex.search(dep):
+                        self.add_score(check_score)
 
     def add_score(self, score: float):
         """
