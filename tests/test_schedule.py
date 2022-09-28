@@ -62,7 +62,7 @@ def test_no_cap_schedule_generation():
     sch.slots[2].append(placements[0])
     sch.slots[6].append(placements[0])
     print(sch.slots)
-    with pytest.raises(RuntimeError):
+    with pytest.warns(UserWarning):
         sch.schedule_generation()
 
 def test_clean_departments():
