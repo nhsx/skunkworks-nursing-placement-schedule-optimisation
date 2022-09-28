@@ -11,6 +11,7 @@ from typing import Tuple
 import yaml
 import os
 import logging
+import warnings
 from utils.utils import get_time_now
 
 
@@ -148,9 +149,11 @@ class Schedule:
             # Find a ward which valid based on capacity and education audit
             ward_ids = set()
             while invalid_ward:
-                if len(ward_ids) == len(self.wards):
-                    raise RuntimeError('No valid ward is available for placement to be allocated to')
                 invalid_ward = False
+                if len(ward_ids) == len(self.wards):
+                    warnings.warn('No valid ward is available for placement to be allocated to, random ward assigned')
+                    ward_id = randint(0, len(self.wards) - 1)
+                    break
                 ward_id = randint(0, len(self.wards) - 1)
                 ward_ids.add(ward_id)
                 slot_index_increment = self.calc_slot_index(
