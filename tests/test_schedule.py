@@ -99,3 +99,13 @@ def test_covid_status_get_fitness():
     sch.get_fitness()
     assert sch.viable == False
     assert sch.non_viable_reason == 'Covid status not compatible'
+
+def test_double_booked_get_fitness():
+    wards = [Ward([0, 'WardA', 'DepartmentB', 4, 'Low/Medium', 1, 1, 1, 1]),Ward([1, 'WardB', 'DepartmentA', 1, 'Low/Medium', 1, 1, 1, 1])]
+    placements = [Placement([0, 'A_P1,E1', 'CohortA', 2, 1, '2020/01/01', 'P2', "['WardA','WardB']", "['DepA','DepB']", 'Low/Medium']),Placement([0, 'A_P1,E1', 'CohortA', 2, 1, '2020/01/01', 'P2', "['WardA','WardB']", "['DepA','DepB']", 'Low/Medium'])]
+    slots = [Slot([0,'1']),Slot([1,'2']),Slot([2,'3']),Slot([3,'4'])]
+    sch = Schedule.Schedule(slots = slots, wards = wards, placements = placements, num_weeks = 4)
+    sch.schedule_generation()
+    sch.get_fitness()
+    assert sch.viable == False
+    assert sch.non_viable_reason == 'Double booked'
