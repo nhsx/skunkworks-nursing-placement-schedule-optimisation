@@ -49,7 +49,7 @@ def test_no_wards_covid_schedule_generation():
     placements = [Placement([0, 'A_P1,E1', 'CohortA', 2, 1, '2020/01/01', 'P2', ['list'], ['list'], 'Low/Medium'])]
     slots = [Slot([0,'1']),Slot([1,'2']),Slot([2,'3']),Slot([3,'4'])]
     sch = Schedule.Schedule(slots = slots, wards = wards, placements = placements, num_weeks = 4)
-    with pytest.raises(RuntimeError):
+    with pytest.warns(UserWarning):
         sch.schedule_generation()
 
 def test_no_cap_schedule_generation():
