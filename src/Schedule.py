@@ -245,7 +245,6 @@ class Schedule:
         self.schedule_eval_scores["cap_exceeded_score"] = 0
         self.schedule_eval_scores["double_booked_score"] = 0
         ward_utilisation = []
-        unallocatedPlacements = []
 
         # Create a list of placements to be allocated, so we can check
         # later whether all placements allocated in a schedule
@@ -255,8 +254,6 @@ class Schedule:
 
             if confirmed_placement["placement"].id in placementsToAllocate:
                 placementsToAllocate.remove(confirmed_placement["placement"].id)
-            else:
-                unallocatedPlacements.append(confirmed_placement["placement"].id)
 
             placement_index = int(confirmed_placement["slotIndex"])
             ward_index = int(math.floor(placement_index / len(self.placement_slots)))
@@ -414,7 +411,7 @@ class Schedule:
         )
 
         ## Increase fitness if all placements assigned ##
-        if len(placementsToAllocate) == 0 and len(unallocatedPlacements) == 0:
+        if len(placementsToAllocate) == 0:
             self.add_score(self.all_placements_assigned_scoring_factor)
         else:
             self.viable = False
