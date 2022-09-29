@@ -169,3 +169,15 @@ def test_mutation():
         if mut_sch.conf_placements[0]['slotIndex'] != prev_slot_index:
             total_changed += 1
     assert total_changed > 0
+
+def test_produce_dataframe():
+    wards = [Ward([0, 'WardA', 'DepartmentB', 4, 'Low/Medium', 3, 2, 3, 2]),Ward([1, 'WardB', 'DepartmentA', 1, 'Low/Medium', 2, 2, 0, 1])]
+    placements = [Placement([0, 'A_P1,E1', 'CohortA', 2, 1, '2020/01/01', 'P2', "['WardA','WardB']", "['DepA','DepB']", 'Low/Medium'])]
+    slots = [Slot([0,'1']),Slot([1,'2']),Slot([2,'3']),Slot([3,'4'])]
+    sch = Schedule.Schedule(slots = slots, wards = wards, placements = placements, num_weeks = 4)
+
+    sch.schedule_generation()
+    sch_df = sch.produce_dataframe()
+    assert sch_df.placement_duration[0] == 2
+    assert sch_df.placement_start_date[0] == '2020/01/01'
+    assert sch_df.p3_ward_capacity[0] == 2
