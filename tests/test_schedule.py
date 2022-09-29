@@ -260,8 +260,7 @@ def test_non_viable_cap_exc_save_report():
 
     sch.schedule_generation()
     sch.get_fitness()
-    sch.schedule_quality_check()
-    print(sch.non_viable_reason)
+
     file_name_prod = sch.save_report()
     file_name_prod_components = file_name_prod.split('_')
     assert file_name_prod_components[8] == '1'
@@ -280,8 +279,7 @@ def test_non_viable_placement_length_save_report():
 
     sch.schedule_generation()
     sch.get_fitness()
-    sch.schedule_quality_check()
-    print(sch.non_viable_reason)
+
     file_name_prod = sch.save_report()
     file_name_prod_components = file_name_prod.split('_')
     assert file_name_prod_components[8] == '1'
