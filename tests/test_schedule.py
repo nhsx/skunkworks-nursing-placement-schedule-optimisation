@@ -130,3 +130,24 @@ def test_populate_schedule():
     sch.populate_schedule()
     assert sch.viable == True
     assert sch.fitness > 0
+
+def test_recombination():
+    wards = [Ward([0, 'WardA', 'DepartmentB', 4, 'Low/Medium', 3, 2, 3, 2]),Ward([1, 'WardB', 'DepartmentA', 1, 'Low/Medium', 2, 2, 0, 1])]
+    placements1 = [Placement([0, 'A_P1,E1', 'CohortA', 2, 1, '2020/01/01', 'P2', "['WardA','WardB']", "['DepA','DepB']", 'Low/Medium'])]
+    placements1.append(placements1[0])
+    slots = [Slot([0,'1']),Slot([1,'2']),Slot([2,'3']),Slot([3,'4'])]
+    sch1 = Schedule.Schedule(slots = slots, wards = wards, placements = placements1, num_weeks = 4)
+
+    wards = [Ward([0, 'WardA', 'DepartmentB', 4, 'Low/Medium', 3, 2, 3, 2]),Ward([1, 'WardB', 'DepartmentA', 1, 'Low/Medium', 2, 2, 0, 1])]
+    placements2 = [Placement([0, 'A_P1,E1', 'CohortA', 3, 1, '2020/01/01', 'P2', "['WardA','WardB']", "['DepA','DepB']", 'Low/Medium'])]
+    placements2.append(placements2[0])
+    slots = [Slot([0,'1']),Slot([1,'2']),Slot([2,'3']),Slot([3,'4'])]
+    sch2 = Schedule.Schedule(slots = slots, wards = wards, placements = placements2, num_weeks = 4)
+
+    sch1.schedule_generation()
+    sch1.populate_schedule()
+    sch2.schedule_generation()
+    sch2.populate_schedule()
+
+    new_schs = sch1.recombination(sch2, 2, 3)
+    assert len(new_schs) == 3
