@@ -155,13 +155,13 @@ def test_recombination():
 def test_mutation():
     wards = [Ward([0, 'WardA', 'DepartmentB', 4, 'Low/Medium', 3, 2, 3, 2]),Ward([1, 'WardB', 'DepartmentA', 1, 'Low/Medium', 2, 2, 0, 1])]
     placements = [Placement([0, 'A_P1,E1', 'CohortA', 2, 1, '2020/01/01', 'P2', "['WardA','WardB']", "['DepA','DepB']", 'Low/Medium'])]
-    slots = [Slot([0,'1']),Slot([1,'2']),Slot([2,'3']),Slot([3,'4'])]
-    sch = Schedule.Schedule(slots = slots, wards = wards, placements = placements, num_weeks = 4)
+    slots = [Slot([0,'1']),Slot([1,'2']),Slot([2,'3']),Slot([3,'4']),Slot([4,'5']),Slot([5,'6']),Slot([6,'7']),Slot([7,'8']),Slot([8,'9']),Slot([9,'10'])]
+    sch = Schedule.Schedule(slots = slots, wards = wards, placements = placements, num_weeks = 10)
 
     sch.schedule_generation()
     prev_slot_index = sch.conf_placements[0]['slotIndex']
     all_mut_schs = []
-    for entry in range(0,20):
+    for entry in range(0,10):
         all_mut_schs.append(sch.mutation(1))
 
     total_changed = 0
