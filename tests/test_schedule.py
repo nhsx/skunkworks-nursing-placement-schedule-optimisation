@@ -286,3 +286,21 @@ def test_non_viable_placement_length_save_report():
     assert file_name_prod_components[9] == 'True.xlsx' # This should be false but no logic implemented
     assert sch.non_viable_reason == None # No non-viable reason specified for incorrect length of placement
     assert os.path.exists(f"results/{file_name_prod}") == True
+
+def test_non_viable_placement_num_save_report():
+    wards = [Ward([0, 'WardA', 'DepartmentB', 4, 'Low/Medium', 3, 2, 3, 2]),Ward([1, 'WardB', 'DepartmentA', 1, 'Low/Medium', 2, 2, 1, 1])]
+    placements = [Placement([0, 'A_P1,E1', 'CohortA', 2, 1, '2020/01/01', 'P2', "['WardA','WardB']", "['DepA','DepB']", 'Low/Medium'])]
+    slots = [Slot([0,'1']),Slot([1,'2']),Slot([2,'3']),Slot([3,'4'])]
+    sch = Schedule.Schedule(slots = slots, wards = wards, placements = placements, num_weeks = 4)
+    sch.schedule_generation()
+    total_slots = len(slots) * len(wards)
+    sch.slots = [[] for _ in range(0, total_slots)]
+
+    sch.get_fitness()
+    print(sch.non_viable_reason)
+    file_name_prod = sch.save_report()
+    file_name_prod_components = file_name_prod.split('_')
+    assert file_name_prod_components[8] == '1'
+    assert file_name_prod_components[9] == 'False.xlsx' 
+    assert sch.non_viable_reason == "Placement not allocated"
+    assert os.path.exists(f"results/{file_name_prod}") == True
