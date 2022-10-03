@@ -870,7 +870,7 @@ class Schedule:
 
         :returns: the file name of the saved down report
         """
-        if not any(self.slots):
+        if all(x == [] for x in self.slots):
             raise ValueError('There are no placements assigned, so no report can be generated.')
 
         schedule = self.produce_dataframe()
