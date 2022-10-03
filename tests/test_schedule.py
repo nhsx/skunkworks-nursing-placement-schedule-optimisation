@@ -1,10 +1,7 @@
-from tkinter import Place
 from src import Schedule
 from src.Ward import Ward
 from src.Placement import Placement
 from src.Slot import Slot
-import pandas as pd
-import numpy as np
 import pytest
 import os
 
