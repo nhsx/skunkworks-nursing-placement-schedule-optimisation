@@ -159,14 +159,17 @@ def test_mutation():
     sch.schedule_generation()
     prev_slot_index = sch.conf_placements[0]['slotIndex']
     all_mut_schs = []
-    for entry in range(0,10):
-        all_mut_schs.append(sch.mutation(1))
-
-    total_changed = 0
-    for mut_sch in all_mut_schs:
+    
+    no_change = True
+    change_count = 0
+    
+    while no_change:
+        mut_sch = sch.mutation(20)
         if mut_sch.conf_placements[0]['slotIndex'] != prev_slot_index:
-            total_changed += 1
-    assert total_changed > 0
+            change_count += 1
+            no_change = False
+            break
+    assert change_count > 0
 
 def test_produce_dataframe():
     wards = [Ward([0, 'WardA', 'DepartmentB', 4, 'Low/Medium', 3, 2, 3, 2]),Ward([1, 'WardB', 'DepartmentA', 1, 'Low/Medium', 2, 2, 0, 1])]
