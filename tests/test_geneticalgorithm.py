@@ -3,9 +3,9 @@ from src.GeneticAlgorithm import GeneticAlgorithm
 from src.Ward import Ward
 from src.Placement import Placement
 from src.Slot import Slot
-import inspect
 import pytest
 import os
+from operator import itemgetter
 
 
 def test_generate_new_schedule():
