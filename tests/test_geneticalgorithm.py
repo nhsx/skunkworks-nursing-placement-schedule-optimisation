@@ -122,3 +122,20 @@ def test_change_detected_evaluate():
     assert fitness == ga.schedules[0]['fitness']
     assert iter_count == 1
     assert schedule_fitnesses[0] == ga.schedules[0]['fitness']
+
+
+def test_execute_mutation():
+    wards = [Ward([0, 'WardA', 'DepartmentB', 4, 'Low/Medium', 3, 2, 3, 2]),Ward([1, 'WardB', 'DepartmentA', 1, 'Low/Medium', 2, 2, 0, 1])]
+    placements = [Placement([0, 'A_P1,E1', 'CohortA', 2, 1, '2020/01/01', 'P2', "['WardA','WardB']", "['DepA','DepB']", 'Low/Medium'])]
+    slots = [Slot([0,'1']),Slot([1,'2']),Slot([2,'3']),Slot([3,'4'])]
+    ga = GeneticAlgorithm(slots, wards, placements, 100, 4)
+    ga.seed_schedules()
+
+    ga.execute_mutation()
+    assert len(ga.new_schedules) > 1
+
+    for i in range(0,len(ga.new_schedules)):
+        assert ga.new_schedules[i]['fitness'] > 0
+        assert isinstance(ga.new_schedules[i]['schedule'], Schedule) == True
+        assert ga.new_schedules[i]['sched_id'] >= 0
+        assert ga.new_schedules[i]['sched_id'] <= 9999
