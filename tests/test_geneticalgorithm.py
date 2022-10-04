@@ -103,3 +103,22 @@ def test_evaluate():
     assert fitness == ga.schedules[0]['fitness']
     assert iter_count == 1
     assert schedule_fitnesses[0] == ga.schedules[0]['fitness']
+
+def test_change_detected_evaluate():
+    wards = [Ward([0, 'WardA', 'DepartmentB', 4, 'Low/Medium', 3, 2, 3, 2]),Ward([1, 'WardB', 'DepartmentA', 1, 'Low/Medium', 2, 2, 0, 1])]
+    placements = [Placement([0, 'A_P1,E1', 'CohortA', 2, 1, '2020/01/01', 'P2', "['WardA','WardB']", "['DepA','DepB']", 'Low/Medium'])]
+    slots = [Slot([0,'1']),Slot([1,'2']),Slot([2,'3']),Slot([3,'4'])]
+    ga = GeneticAlgorithm(slots, wards, placements, 1, 4)
+    ga.seed_schedules()
+
+    ga.fitness_threshold = 0.2
+    ga.last_fitness = ga.schedules[0]['fitness']
+    ga.max_no_change_iterations = 1
+
+    continue_eval, chosen_schedule, fitness, iter_count, schedule_fitnesses = ga.evaluate()
+
+    assert continue_eval == False
+    assert chosen_schedule == ga.schedules[0]['schedule']
+    assert fitness == ga.schedules[0]['fitness']
+    assert iter_count == 1
+    assert schedule_fitnesses[0] == ga.schedules[0]['fitness']
