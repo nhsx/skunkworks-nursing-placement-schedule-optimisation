@@ -139,3 +139,20 @@ def test_execute_mutation():
         assert isinstance(ga.new_schedules[i]['schedule'], Schedule) == True
         assert ga.new_schedules[i]['sched_id'] >= 0
         assert ga.new_schedules[i]['sched_id'] <= 9999
+
+def test_select_parents():
+    wards = [Ward([0, 'WardA', 'DepartmentB', 4, 'Low/Medium', 3, 2, 3, 2]),Ward([1, 'WardB', 'DepartmentA', 1, 'Low/Medium', 2, 2, 0, 1])]
+    placements = [Placement([0, 'A_P1,E1', 'CohortA', 2, 1, '2020/01/01', 'P2', "['WardA','WardB']", "['DepA','DepB']", 'Low/Medium'])]
+    slots = [Slot([0,'1']),Slot([1,'2']),Slot([2,'3']),Slot([3,'4'])]
+    ga = GeneticAlgorithm(slots, wards, placements, 100, 4)
+    ga.seed_schedules()
+
+    parents_list = ga.select_parents()
+
+    assert len(parents_list) > 0
+    for i in range(0,len(parents_list)):
+        print(parents_list[i])
+        assert isinstance(parents_list[i][0], int) == True
+        assert isinstance(parents_list[i][1], int) == True
+
+
