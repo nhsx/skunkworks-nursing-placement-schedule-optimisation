@@ -193,11 +193,12 @@ def test_update_population():
     slots = [Slot([0,'1']),Slot([1,'2']),Slot([2,'3']),Slot([3,'4'])]
     ga = GeneticAlgorithm(slots, wards, placements, 100, 4)
     ga.seed_schedules()
-    ga.culling(20)
+    num_cull_sch = 20
+    ga.culling(num_cull_sch)
+
     orig_schedules = sorted(ga.schedules, key=itemgetter("fitness"))
 
     ga.update_population()
 
-    print(len(ga.schedules))
     assert ga.schedules[-1]['fitness'] >= ga.schedules[-2]['fitness']
-    
+    assert all([a != b for a, b in zip(orig_schedules[0:num_cull_sch], ga.schedules[0:num_cull_sch])])
