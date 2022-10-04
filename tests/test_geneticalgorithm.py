@@ -202,3 +202,14 @@ def test_update_population():
 
     assert ga.schedules[-1]['fitness'] >= ga.schedules[-2]['fitness']
     assert all([a != b for a, b in zip(orig_schedules[0:num_cull_sch], ga.schedules[0:num_cull_sch])])
+
+def test_evolve():
+    wards = [Ward([0, 'WardA', 'DepartmentB', 4, 'Low/Medium', 3, 2, 3, 2]),Ward([1, 'WardB', 'DepartmentA', 1, 'Low/Medium', 2, 2, 2, 1])]
+    placements = [Placement([0, 'A_P1,E1', 'CohortA', 2, 1, '2020/01/01', 'P2', "['WardA','WardB']", "['DepA','DepB']", 'Low/Medium'])]
+    slots = [Slot([0,'1']),Slot([1,'2']),Slot([2,'3']),Slot([3,'4'])]
+    ga = GeneticAlgorithm(slots, wards, placements, 100, 4)
+    ga.seed_schedules()
+
+    continue_eval, chosen_schedule, fitness, iteration, schedule_fitnesses = ga.evolve()
+
+    assert continue_eval == True
