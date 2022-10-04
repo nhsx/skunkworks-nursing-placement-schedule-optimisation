@@ -51,3 +51,13 @@ def test_viable_viable_schedule_check():
     assert continue_eval == False
     assert sch == ga.schedules[0]['schedule']
     assert sch_fit_list[0] > 0
+
+def test_status_update():
+    wards = [Ward([0, 'WardA', 'DepartmentB', 4, 'Low/Medium', 3, 2, 3, 2]),Ward([1, 'WardB', 'DepartmentA', 1, 'Low/Medium', 2, 2, 0, 1])]
+    placements = [Placement([0, 'A_P1,E1', 'CohortA', 2, 1, '2020/01/01', 'P2', "['WardA','WardB']", "['DepA','DepB']", 'Low/Medium'])]
+    slots = [Slot([0,'1']),Slot([1,'2']),Slot([2,'3']),Slot([3,'4'])]
+    ga = GeneticAlgorithm(slots, wards, placements, 1, 4)
+    ga.seed_schedules()
+    count = ga.status_update()
+    assert count == 1
+    assert ga.last_fitness == ga.schedules[0]['fitness']
