@@ -103,8 +103,8 @@ class DataLoader:
         ).to_dict()
         self.ward_dep_match[""] = "None"
         self.students["prev_deps"] = [
-            [self.ward_dep_match[value.rstrip().lstrip()] for value in x]
-            for x in self.students["allprevwards"]
+            [self.ward_dep_match[value.rstrip().lstrip()] for value in x if value is not '[]' ]
+            if not x else '' for x in self.students["allprevwards"]
         ]
         self.students["allprevdeps"] = [
             ", ".join(dep_list) for dep_list in self.students["prev_deps"]
