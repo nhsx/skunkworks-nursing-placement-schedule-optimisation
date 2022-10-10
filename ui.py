@@ -67,7 +67,7 @@ def main(num_schedules, pop_size):
     )
 
     logging.info(f"Total weeks covered: {num_weeks}")
-    dataload.restructureData(num_weeks)
+    dataload.restructure_data(num_weeks)
 
     num_iter = num_schedules
     scheduleCompare = []
