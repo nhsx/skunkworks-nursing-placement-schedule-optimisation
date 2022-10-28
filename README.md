@@ -119,6 +119,12 @@ Your input data file will need to be stored in `data/` and its name added to `co
 
 If further support is needed, please get in touch with us for support: england.aiskunkworks@nhs.net
 
+## Testing
+A set of unit tests are provided as part of this code, intended to demonstrate the robustness of the functionality as well as providing a basis on which future function can be developed with intended behaviour outlined in these tests.
+
+The tests are written using pytest, to run all tests, run the following from the top level directory (e.g. `skunkworks-nursing-placement-schedule-optimisation`):
+
+`pytest --cov=src`
 
 ## NHS AI Lab Skunkworks
 The project is carried out by the NHS AI Lab Skunkworks, which exists within the NHS AI Lab to support the health and care community to rapidly progress ideas from the conceptual stage to a proof of concept.

@@ -1,5 +1,6 @@
 from xmlrpc.client import Boolean
 from src.Schedule import Schedule
+from utils.utils import get_time_now
 from operator import itemgetter
 from datetime import datetime
 import numpy as np
@@ -48,42 +49,42 @@ class GeneticAlgorithm:
         with open("config/params.yml") as f:
             params = yaml.load(f, Loader=yaml.FullLoader)
 
+        ga_params = params["genetic_algorithm_params"]
         self.new_schedule_count = int(
             self.number_of_schedules
-            * params["genetic_algorithm_params"]["new_schedule_prop"]
+            * ga_params["new_schedule_prop"]
         )
 
-        self.mutation_probability = params["genetic_algorithm_params"][
-            "mutationProbability"
-        ]
-        self.recombination_probability = params["genetic_algorithm_params"][
-            "recombinationProbability"
-        ]
-        self.num_mutations = params["genetic_algorithm_params"][
-            "num_mutations"
-        ]  # Note that this is number of mutations per schedule
-        self.recomb_points = params["genetic_algorithm_params"]["recomb_points"]
-        self.max_no_change_iterations = params["genetic_algorithm_params"][
-            "max_no_change_iterations"
-        ]
-        self.fitness_threshold = params["genetic_algorithm_params"]["fitness_threshold"]
-        self.changed_protected_proportion = params["genetic_algorithm_params"][
-            "changed_protected_proportion"
-        ]
+        self.mutation_probability = ga_params["mutationProbability"]
+        self.recombination_probability = ga_params["recombinationProbability"]
+        self.num_mutations = ga_params["num_mutations"]  # Note that this is number of mutations per schedule
+        self.recomb_points = ga_params["recomb_points"]
+        self.max_no_change_iterations = ga_params["max_no_change_iterations"]
+        self.fitness_threshold = ga_params["fitness_threshold"]
+        self.changed_protected_proportion = ga_params["changed_protected_proportion"]
 
         self.last_fitness = 0
         self.no_change_count = 0
+
+    def generate_new_schedule(self):
+        """
+        Function to generate new schedule and calculate fitness score
+
+        :returns: a populated Schedule object 
+        """
+        schedule_obj = Schedule(
+                self.slots, self.wards, self.placements, self.num_weeks
+            )
+        schedule_obj.schedule_generation()
+        schedule_obj.get_fitness()
+        return schedule_obj
 
     def seed_schedules(self):
         """
         Function to initialise the first generation of schedules
         """
         for i in range(0, self.number_of_schedules):
-            schedule_obj = Schedule(
-                self.slots, self.wards, self.placements, self.num_weeks
-            )
-            schedule_obj.schedule_generation()
-            schedule_obj.get_fitness()
+            schedule_obj = self.generate_new_schedule()
             self.schedules.append(
                 {
                     "schedule": schedule_obj,
@@ -91,6 +92,8 @@ class GeneticAlgorithm:
                     "sched_id": randrange(9999),
                 }
             )
+
+
 
     def viable_schedule_check(self) -> Tuple[bool, object, list]:
         """
@@ -123,7 +126,7 @@ class GeneticAlgorithm:
         """
         total_schedules = len(self.schedules)
         if self.last_fitness < self.schedules[total_schedules - 1]["fitness"]:
-            now = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+            now = get_time_now()
             self.last_fitness = self.schedules[total_schedules - 1]["fitness"]
             logging.info(
                 f'At {now} the best fitness in generation is schedule {self.schedules[total_schedules - 1]["sched_id"]} with: {self.last_fitness}'
@@ -262,11 +265,7 @@ class GeneticAlgorithm:
         :returns: no explicit return but populates new_schedules class object with newly generated schedules
         """
         for i in range(0, num_new_schedules):
-            schedule_obj = Schedule(
-                self.slots, self.wards, self.placements, self.num_weeks
-            )
-            schedule_obj.schedule_generation()
-            schedule_obj.get_fitness()
+            schedule_obj = self.generate_new_schedule()
             self.new_schedules.append(
                 {
                     "schedule": schedule_obj,

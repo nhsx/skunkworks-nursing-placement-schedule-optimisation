@@ -11,19 +11,32 @@ import pandas as pd
 import numpy as np
 from src.data_load import DataLoader
 from src.GeneticAlgorithm import GeneticAlgorithm
+from utils.utils import get_time_now
 import yaml
 from datetime import datetime
 import os
 import matplotlib.pyplot as plt
 
+def preproc_data(dataloader,file_location):
+    dataloader.readData(file_location)
+    dataloader.cleanPrevPlacements()
+    dataloader.cleanStudentPlacementCohorts()
+    dataloader.calcWardAuditExp()
+    dataloader.cleanWardCapacity()
+    dataloader.cleanSelectWardColumnNames()
+    dataloader.cleanStudentsPreviousDepartments()
+    dataloader.cleanStudentPreviousWards()
+    dataloader.mergeStudentsWithPlacements()
+    dataloader.datePreparation()
+    return dataloader
 
-def main(num_schedules: int, pop_size: int):
+def main(num_schedules, pop_size):
     """
     Function to run Nursing Placement Optimisation tool end-to-end
-    :param num_schedules: the overall integer number of schedules to output from the tool. Can be otherwise thought of as number of times the tool is run
-    :param pop_size: the size of the population to be used for each run. This is the integer number of schedules randomly produced for each run of the tool, which are used as the base to find the best performing schedule from
+    :params num_schedules: the overall number of schedules to output from the tool. Can be otherwise thought of as number of times the tool is run
+    :params pop_size: the size of the population to be used for each run. This is the number of schedules randomly produced for each run of the tool, which are used as the base to find the best performing schedule from
     
-    :returns: A series of .xlsx files, stored in results/ which contain the schedules, as well as a comparison file which shows the scores of each schedule beside each other
+    Returns a series of .xlsx files, stored in results/ which contain the schedules, as well as a comparison file which shows the scores of each schedule beside each other
     """
 
     st.info(
@@ -54,14 +67,14 @@ def main(num_schedules: int, pop_size: int):
     )
 
     logging.info(f"Total weeks covered: {num_weeks}")
-    slots, wards, placements = dataload.preprocData(num_weeks)
+    dataload.restructure_data(num_weeks)
 
     num_iter = num_schedules
     scheduleCompare = []
     placeholder = st.empty()
     graph_placeholder = st.empty()
     for i in range(num_iter):
-        GA = GeneticAlgorithm(slots, wards, placements, pop_size, num_weeks)
+        GA = GeneticAlgorithm(dataload.slots, dataload.wards, dataload.placements, pop_size, num_weeks)
         GA.seed_schedules()
         (
             continue_eval,
@@ -155,10 +168,9 @@ def main(num_schedules: int, pop_size: int):
     except OSError:
         pass  # already exists
 
-    now = datetime.now().strftime("%d_%m_%Y_%H_%M_%S")
+    now = get_time_now()
     file_name = f"schedule_comparison_{now}.csv"
     full_save_path = os.path.join(save_directory, file_name)
-    now = datetime.now().strftime("%d_%m_%Y_%H_%M_%S")
     scheduleCompareDF.to_csv(full_save_path)
     logging.info("Comparison file saved")
     viableBool = False
@@ -196,7 +208,7 @@ if page == "Run algorithm":
 
     if file_source == "Fake data":
         try:
-            dataload.readData("data/fake_data.xlsx")
+            dataload = preproc_data(dataload,"data/fake_data.xlsx")
         except FileNotFoundError:
             logging.exception(f"No fake_data.xlsx file found in the data directory")
     elif file_source == "Your own data":
@@ -208,7 +220,7 @@ if page == "Run algorithm":
             )
         else:
             try:
-                dataload.readData(f"data/{input_file_name}")
+                dataload = preproc_data(dataload,f"data/{input_file_name}")
             except FileNotFoundError:
                 logging.exception(
                     f"No file found by the name {input_file_name} in the data directory"

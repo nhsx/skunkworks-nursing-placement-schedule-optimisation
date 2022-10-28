@@ -11,6 +11,8 @@ from typing import Tuple
 import yaml
 import os
 import logging
+import warnings
+from utils.utils import get_time_now
 
 
 class Schedule:
@@ -145,9 +147,15 @@ class Schedule:
             invalid_ward = True
 
             # Find a ward which valid based on capacity and education audit
+            ward_ids = set()
             while invalid_ward:
                 invalid_ward = False
+                if len(ward_ids) == len(self.wards):
+                    warnings.warn('No valid ward is available for placement to be allocated to, random ward assigned')
+                    ward_id = randint(0, len(self.wards) - 1)
+                    break
                 ward_id = randint(0, len(self.wards) - 1)
+                ward_ids.add(ward_id)
                 slot_index_increment = self.calc_slot_index(
                     ward_id, self.num_weeks, p.start
                 )
@@ -175,7 +183,6 @@ class Schedule:
                                     same_year_count += 1
                             if same_year_count >= year_cap:
                                 invalid_ward = True
-                                break
                             if invalid_ward:
                                 break
                         slot_index_increment += 1
@@ -211,13 +218,14 @@ class Schedule:
             "eneral": "general",
             "None": "",
             "-": "",
-            "\xa0": " ",
+            "\xa0": "",
             "  ": " ",
         }
         for word, replacement in replace_dict.items():
             output_string = output_string.replace(word, replacement)
         output_string = output_string.lower()
         output_list = output_string.split(" ")
+        output_list = list(filter(None, output_list))
         return output_list
 
     def get_fitness(self):
@@ -237,7 +245,6 @@ class Schedule:
         self.schedule_eval_scores["cap_exceeded_score"] = 0
         self.schedule_eval_scores["double_booked_score"] = 0
         ward_utilisation = []
-        unallocatedPlacements = []
 
         # Create a list of placements to be allocated, so we can check
         # later whether all placements allocated in a schedule
@@ -247,8 +254,6 @@ class Schedule:
 
             if confirmed_placement["placement"].id in placementsToAllocate:
                 placementsToAllocate.remove(confirmed_placement["placement"].id)
-            else:
-                unallocatedPlacements.append(confirmed_placement["placement"].id)
 
             placement_index = int(confirmed_placement["slotIndex"])
             ward_index = int(math.floor(placement_index / len(self.placement_slots)))
@@ -406,7 +411,7 @@ class Schedule:
         )
 
         ## Increase fitness if all placements assigned ##
-        if len(placementsToAllocate) == 0 and len(unallocatedPlacements) == 0:
+        if len(placementsToAllocate) == 0:
             self.add_score(self.all_placements_assigned_scoring_factor)
         else:
             self.viable = False
@@ -453,10 +458,8 @@ class Schedule:
                 * self.critical_care_placement_scoring_factor
             )  # High Dependency ward component
         )
-        if len(self.conf_placements):
-            self.fitness = float(self.schedule_scores) / max_score
-        else:
-            self.fitness = 0
+        self.fitness = float(self.schedule_scores) / max_score
+
 
         if self.viable is None:
             self.viable = True
@@ -470,8 +473,9 @@ class Schedule:
         if check_boolean:
             check_words_regex = re.compile("|".join(check_words))
             for assigned_departments in self.placement_deps.values():
-                if check_words_regex.search(assigned_departments):
-                    self.add_score(check_score)
+                for dep in assigned_departments:
+                    if check_words_regex.search(dep):
+                        self.add_score(check_score)
 
     def add_score(self, score: float):
         """
@@ -669,7 +673,7 @@ class Schedule:
         except OSError:
             pass  # already exists
 
-        now = datetime.now().strftime("%d_%m_%Y_%H_%M_%S")
+        now = get_time_now()
         full_save_path = os.path.join(save_directory, f"sched_output_{now}.csv")
         schedule_df.to_csv(full_save_path)
         return schedule_df
@@ -866,6 +870,9 @@ class Schedule:
 
         :returns: the file name of the saved down report
         """
+        if all(x == [] for x in self.slots):
+            raise ValueError('There are no placements assigned, so no report can be generated.')
+
         schedule = self.produce_dataframe()
         logging.info(f"Generation: {str(self.generation)}")
         logging.info(f"Schedule Viable?: {self.viable}")
@@ -1019,7 +1026,7 @@ class Schedule:
         except OSError:
             pass  # already exists
 
-        now = datetime.now().strftime("%d_%m_%Y_%H_%M_%S")
+        now = get_time_now()
         file_name = f"schedule_output_{now}_{self.generation}_{self.viable}.xlsx"
         self.file_name = file_name
 
